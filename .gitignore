@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Next.js / Payload build output
+.next/
+out/
+build/
+dist/
+
+# Environment — never commit secrets. Copy .env.example to .env locally.
+.env
+.env.*
+!.env.example
+
+# Local media uploads (dev only; production media lives in R2)
+/media
+/public/media
+
+# Payload generated importmap (regenerated at build)
+src/app/(payload)/admin/importMap.js
+
+# Logs and OS noise
+*.log
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
