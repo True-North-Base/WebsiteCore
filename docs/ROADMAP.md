@@ -6,11 +6,11 @@ Implementation phases for the CR Mariposa site. Each phase has exit criteria; do
 
 Design reviewed, live site inventoried, versions verified, architecture and content model documented (this docs set). No application code.
 
-## Phase 1 — Foundation  `feature/project-foundation`
+## Phase 1 — Foundation ✅ (2026-08-26)
 
-Scaffold Payload + Next.js (pnpm, Node 22, versions per DECISIONS.md D-001) with Postgres adapter (UUID ids), Tailwind, ESLint + Prettier, module skeleton (`src/modules/core`, `src/modules/rentals`), `users` + `media` collections, localization config (en/es), `.env.example`, base layout with fonts.
+Scaffolded Payload 3.88 + Next 16.3 (pnpm, Node 22.23) with Postgres adapter (UUID ids), Tailwind 4 with design tokens, ESLint (incl. core→rentals boundary rule) + Prettier, module skeleton (`src/modules/core`, `src/modules/rentals`), `users` (roles admin/editor) + `media` collections, localization en/es with `[locale]` routing and typed UI dictionaries, `.env.example`, fonts via next/font.
 
-**Exit:** `pnpm build` succeeds; admin login works locally against Supabase dev DB; lint/typecheck clean; DEVELOPMENT.md written (setup steps).
+**Exit verified:** `pnpm build` ✅ (`/en`, `/es` SSG); admin login ✅ (schema pushed to local Postgres 17.11, seeded admin, JWT login via `/api/users/login`, login UI renders); lint ✅ typecheck ✅; DEVELOPMENT.md written. *Deviation from plan: verified against local portable Postgres instead of a Supabase dev DB (no accounts available in-session — Supabase is wired for staging in Phase 7 setup).*
 
 ## Phase 2 — Design proof  `feature/homepage`, `feature/property-page`
 

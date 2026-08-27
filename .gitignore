@@ -19,6 +19,9 @@ dist/
 # Payload generated importmap (regenerated at build)
 src/app/(payload)/admin/importMap.js
 
+# TypeScript incremental build info
+*.tsbuildinfo
+
 # Logs and OS noise
 *.log
 .DS_Store
