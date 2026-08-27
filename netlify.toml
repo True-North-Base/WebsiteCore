@@ -1,0 +1,9 @@
+# Netlify build configuration. The Next.js runtime is detected automatically.
+# Required env vars (set in Netlify UI, not here): DATABASE_URL (Supabase
+# transaction pooler string), PAYLOAD_SECRET, NEXT_PUBLIC_SERVER_URL.
+
+[build]
+command = "pnpm build"
+
+[build.environment]
+NODE_VERSION = "22"

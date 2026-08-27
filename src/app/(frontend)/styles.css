@@ -1,0 +1,33 @@
+@import 'tailwindcss';
+
+/* Design tokens from the "CR Mariposa 1C Refined" design (Classical system).
+   Full reference: docs/ARCHITECTURE.md §5. DESIGN_SYSTEM.md arrives in Phase 2. */
+@theme {
+  /* grounds */
+  --color-sand-50: #f6f2ea;
+  --color-sand-100: #eae3d6;
+  --color-sand-200: #ddd6c8;
+
+  /* ink */
+  --color-basalt: #1d1f1c;
+
+  /* clay accent ramp */
+  --color-clay-300: #c98a5e;
+  --color-clay-500: #9c5f3c;
+  --color-clay-700: #7a4526;
+
+  /* muted greens for secondary text */
+  --color-moss-400: #6e6a5f;
+  --color-moss-600: #4a4f46;
+
+  /* hairline divider */
+  --color-divider: rgb(29 31 28 / 0.16);
+
+  /* type — square-cut identity: display serif, readable body, sans for UI chrome */
+  --font-display: var(--font-cormorant), 'Cormorant Garamond', serif;
+  --font-body: var(--font-lora), Lora, serif;
+  --font-ui: var(--font-archivo), Archivo, sans-serif;
+
+  /* the Classical system is square-cut: default radius stays 0 */
+  --radius: 0px;
+}
