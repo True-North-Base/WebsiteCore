@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { isLocale } from '@/i18n'
 import { PhotoShowcase } from '@/modules/rentals/components/PhotoShowcase'
 import { getPropertyPageContent } from '@/modules/rentals/lib/cms-content'
+import { localizedAlternates } from '@/modules/rentals/lib/seo'
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string; slug: string }>
@@ -18,10 +19,7 @@ export async function generateMetadata(props: {
     title: `${result.content.name} · ${result.content.labels.photoShowcase}`,
     alternates: {
       canonical: `/${locale}/properties/${slug}`,
-      languages: {
-        en: `/en/properties/${slug}/photos`,
-        es: `/es/properties/${slug}/photos`,
-      },
+      languages: localizedAlternates(`properties/${slug}/photos`),
     },
     robots: { follow: true, index: false },
   }

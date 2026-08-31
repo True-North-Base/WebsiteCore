@@ -60,6 +60,8 @@ Accessibility pass (keyboard, contrast, alt coverage), per-page/property SEO met
 
 **Exit:** checks above documented as executed, with numbers.
 
+**Chunk 1 launch-foundation checkpoint — 2026-08-30:** added a CMS-backed bilingual sitemap with EN/ES/x-default alternates, environment-safe robots behavior that blocks staging while reserving production crawling for the canonical domain, sanitized Organization/WebSite/Accommodation/Breadcrumb JSON-LD, complete 301 coverage for the fresh 15-path Squarespace sitemap, and a branded bilingual global/route-level 404. Current Google VacationRental rich-result markup is deliberately deferred because most properties do not yet meet its required occupancy, precise-coordinate, stable-identifier and minimum-eight-photo contract. Chunk 2 remains accessibility, performance measurement/fixes, form spam protection and the client acceptance checklist.
+
 ## Phase 7 — Staging & client acceptance
 
 Netlify staging deploy on production infra (Supabase prod DB, R2). Reassess D-005 (admin behavior on Netlify). Give the client an acceptance checklist; collect consolidated feedback; implement approved fixes.

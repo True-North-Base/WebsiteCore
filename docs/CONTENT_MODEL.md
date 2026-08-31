@@ -135,6 +135,7 @@ Every legacy Squarespace path 301s to the new structure before DNS cutover (impl
 
 | Legacy path | New path |
 |---|---|
+| `/home` | `/en` |
 | `/terrazasescazu` | `/en/properties/terrazas-escazu` |
 | `/penthouseoasis` | `/en/properties/penthouse-oasis` |
 | `/terrazadowntown` | `/en/properties/terraza-downtown` |
@@ -152,7 +153,7 @@ Every legacy Squarespace path 301s to the new structure before DNS cutover (impl
 
 URL fragments are not sent to the server, so `/#contact` cannot have its own server-side redirect rule. Preserve the old deep link by making the `/` → `/en` transition retain `#contact` and providing a matching contact anchor on `/en`, or use a tiny client-side handoff to `/en/contact`. Verify the real browser behavior before cutover.
 
-The homepage navigation exposed all 14 property paths above on 2026-08-26. The Squarespace sitemap could not be fetched through the audit tool, so Phase 6 must still crawl the live sitemap and internal links to catch unlinked pages, alternate/case/trailing-slash forms, and any URLs added after this inventory.
+The live Squarespace sitemap was fetched successfully on 2026-08-30 and contained exactly 15 public paths: `/home` plus the 14 property paths above. All 15 are represented by explicit permanent redirects. Re-run this crawl immediately before DNS cutover to catch any late Squarespace changes, alternate/case forms, or newly linked pages.
 
 ## Content migration concerns
 

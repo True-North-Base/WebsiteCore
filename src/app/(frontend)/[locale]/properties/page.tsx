@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { getDictionary, isLocale } from '@/i18n'
 import { PropertiesIndex } from '@/modules/rentals/components/PropertiesIndex'
 import { getPropertiesPageContent } from '@/modules/rentals/lib/cms-content'
+import { localizedAlternates } from '@/modules/rentals/lib/seo'
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>
@@ -20,7 +21,7 @@ export async function generateMetadata(props: {
     description,
     alternates: {
       canonical: content.seo?.canonical || `/${locale}/properties`,
-      languages: { en: '/en/properties', es: '/es/properties' },
+      languages: localizedAlternates('properties'),
     },
     openGraph: {
       title,

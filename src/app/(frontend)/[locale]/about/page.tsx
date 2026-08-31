@@ -10,6 +10,7 @@ import { getDictionary, isLocale, type Locale } from '@/i18n'
 import { MobileContactBar } from '@/modules/rentals/components/MobileContactBar'
 import { SiteFooter } from '@/modules/rentals/components/SiteFooter'
 import { getHomePageContent } from '@/modules/rentals/lib/cms-content'
+import { localizedAlternates } from '@/modules/rentals/lib/seo'
 import type { AboutPage, Media } from '@/payload-types'
 import config from '@/payload.config'
 
@@ -126,7 +127,7 @@ export async function generateMetadata(props: {
     description,
     alternates: {
       canonical: content.seo?.canonical || `/${locale}/about`,
-      languages: { en: '/en/about', es: '/es/about' },
+      languages: localizedAlternates('about'),
     },
     openGraph: {
       title,

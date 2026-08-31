@@ -88,6 +88,101 @@ summary {
   overflow: hidden;
 }
 
+.not-found-page {
+  align-items: center;
+  background:
+    radial-gradient(circle at 18% 20%, rgb(139 82 47 / 13%), transparent 34%),
+    var(--sand);
+  color: var(--basalt);
+  display: grid;
+  gap: clamp(32px, 7vw, 96px);
+  grid-template-columns: minmax(180px, 0.55fr) minmax(0, 1.45fr);
+  min-height: 100vh;
+  padding: clamp(40px, 8vw, 120px);
+}
+
+.not-found-page__code {
+  color: var(--clay);
+  font-family: var(--font-cormorant), serif;
+  font-size: clamp(120px, 20vw, 300px);
+  font-weight: 400;
+  letter-spacing: -0.08em;
+  line-height: 0.75;
+  margin: 0;
+}
+
+.not-found-page__copy {
+  border-left: 1px solid var(--hairline);
+  display: grid;
+  gap: 48px;
+  padding-left: clamp(28px, 5vw, 72px);
+}
+
+.not-found-page__copy section + section {
+  border-top: 1px solid var(--hairline);
+  padding-top: 40px;
+}
+
+.not-found-page__eyebrow {
+  color: var(--clay-dark);
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  margin: 0 0 14px;
+  text-transform: uppercase;
+}
+
+.not-found-page h1,
+.not-found-page h2 {
+  font-family: var(--font-cormorant), serif;
+  font-size: clamp(40px, 5vw, 68px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  margin: 0;
+}
+
+.not-found-page section > p:not(.not-found-page__eyebrow) {
+  color: var(--stone);
+  font-family: var(--font-archivo), sans-serif;
+  line-height: 1.65;
+  margin: 18px 0 0;
+  max-width: 58ch;
+}
+
+.not-found-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+@media (max-width: 720px) {
+  .not-found-page {
+    align-items: start;
+    gap: 42px;
+    grid-template-columns: 1fr;
+    padding: 48px 20px 64px;
+  }
+
+  .not-found-page__code {
+    font-size: 112px;
+  }
+
+  .not-found-page__copy {
+    border-left: 0;
+    border-top: 1px solid var(--hairline);
+    gap: 36px;
+    padding-left: 0;
+    padding-top: 34px;
+  }
+
+  .not-found-page h1,
+  .not-found-page h2 {
+    font-size: 42px;
+  }
+}
+
 .home-hero {
   height: 420px;
   position: relative;

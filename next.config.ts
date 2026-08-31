@@ -4,6 +4,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import { getR2Config, getR2ImageRemotePattern } from './src/modules/core/storage/r2'
+import { legacyRedirects } from './src/modules/rentals/lib/legacy-redirects'
 
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
@@ -12,10 +13,12 @@ const r2 = getR2Config()
 const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1'],
   redirects: async () => [
-    // Locale routing: the site lives under /en and /es. Full legacy
-    // Squarespace redirects are added in Phase 6 (docs/CONTENT_MODEL.md).
     { source: '/', destination: '/en', permanent: false },
+    ...legacyRedirects,
   ],
+  experimental: {
+    globalNotFound: true,
+  },
   images: {
     localPatterns: [
       {

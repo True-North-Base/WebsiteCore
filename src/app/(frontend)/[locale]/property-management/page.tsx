@@ -10,6 +10,7 @@ import { getDictionary, isLocale, type Locale } from '@/i18n'
 import { MobileContactBar } from '@/modules/rentals/components/MobileContactBar'
 import { SiteFooter } from '@/modules/rentals/components/SiteFooter'
 import { getHomePageContent } from '@/modules/rentals/lib/cms-content'
+import { localizedAlternates } from '@/modules/rentals/lib/seo'
 import type { Media, PropertyManagementPage } from '@/payload-types'
 import config from '@/payload.config'
 
@@ -118,10 +119,7 @@ export async function generateMetadata(props: {
     description,
     alternates: {
       canonical: content.seo?.canonical || `/${locale}/property-management`,
-      languages: {
-        en: '/en/property-management',
-        es: '/es/property-management',
-      },
+      languages: localizedAlternates('property-management'),
     },
     openGraph: {
       title,

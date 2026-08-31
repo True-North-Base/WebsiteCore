@@ -24,6 +24,7 @@ import {
   type GalleryImage,
   type SeoContent,
 } from '@/modules/rentals/lib/phase2-content'
+import { localizedAlternates } from '@/modules/rentals/lib/seo'
 
 type ContactContent = {
   body?: ContactPageGlobal['body']
@@ -174,7 +175,7 @@ export async function generateMetadata(props: {
     description,
     alternates: {
       canonical: content.seo?.canonical || `/${locale}/contact`,
-      languages: { en: '/en/contact', es: '/es/contact' },
+      languages: localizedAlternates('contact'),
     },
     openGraph: {
       title,

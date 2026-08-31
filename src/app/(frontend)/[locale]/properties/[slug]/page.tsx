@@ -2,8 +2,10 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { getDictionary, isLocale } from '@/i18n'
+import { JsonLd } from '@/modules/core/components/JsonLd'
 import { PropertyDetail } from '@/modules/rentals/components/PropertyDetail'
 import { getPropertyPageContent } from '@/modules/rentals/lib/cms-content'
+import { buildPropertyJsonLd, localizedAlternates } from '@/modules/rentals/lib/seo'
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string; slug: string }>
@@ -23,10 +25,7 @@ export async function generateMetadata(props: {
     description,
     alternates: {
       canonical: property.seo?.canonical || `/${locale}/properties/${slug}`,
-      languages: {
-        en: `/en/properties/${slug}`,
-        es: `/es/properties/${slug}`,
-      },
+      languages: localizedAlternates(`properties/${slug}`),
     },
     openGraph: {
       title,
@@ -52,11 +51,14 @@ export default async function PropertyPage(props: {
   if (!result) notFound()
 
   return (
-    <PropertyDetail
-      content={result.content}
-      footer={result.footer}
-      locale={locale}
-      t={getDictionary(locale)}
-    />
+    <>
+      <JsonLd data={buildPropertyJsonLd(locale, result.content)} />
+      <PropertyDetail
+        content={result.content}
+        footer={result.footer}
+        locale={locale}
+        t={getDictionary(locale)}
+      />
+    </>
   )
 }

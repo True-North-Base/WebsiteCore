@@ -165,6 +165,12 @@ The four chips filter published records by public district/region: All, Santa An
 
 Filters are browser-local discovery only. They make no claim about dates, inventory, reservations, prices, or guest eligibility. Unverified occupancy, ratings, stay times, rules and marketplace links remain absent rather than being estimated. The legacy source audit and its factual conflicts are recorded in `docs/PHASE4_PROPERTY_CONTENT_AUDIT.md` for owner confirmation.
 
+## D-026 — Structured data describes verified content without claiming rich-result eligibility
+
+Phase 6 adds sanitized JSON-LD using the broad, truthful `Organization`, `LodgingBusiness`, `WebSite`, `Accommodation`, and `BreadcrumbList` types. Public property markup includes only page-visible names, descriptions, imagery, amenities, district-level location, and approximate coordinates already approved for display. It does not invent ratings, prices, availability, occupancy, reviews, or exact street addresses.
+
+Google's current `VacationRental` rich-result contract requires a stable identifier shared across languages, precise latitude and longitude, occupancy, and at least eight photos including bedroom, bathroom, and common-area coverage. Most of the fourteen current property records intentionally have six representative migrated images and several retain unverified occupancy or coordinate fields. Emitting `VacationRental` now would therefore be incomplete or misleading. Activate it property-by-property only after the owner-approved originals and required facts satisfy the full contract and validate in Google's Rich Results Test. This choice does not alter the Property content boundary or introduce reservation functionality.
+
 ---
 
 _Template:_

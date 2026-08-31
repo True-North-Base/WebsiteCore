@@ -1,6 +1,39 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('Frontend', () => {
+  test('SEO endpoints, structured data, redirects and the bilingual 404 are connected', async ({
+    page,
+    request,
+  }) => {
+    const robotsResponse = await request.get('http://localhost:3000/robots.txt')
+    expect(robotsResponse.status()).toBe(200)
+    await expect(robotsResponse.text()).resolves.toContain('Disallow: /')
+
+    const sitemapResponse = await request.get('http://localhost:3000/sitemap.xml')
+    const sitemapXML = await sitemapResponse.text()
+    expect(sitemapResponse.status()).toBe(200)
+    expect(sitemapXML).toContain('https://www.crmariposarentals.com/en/properties/penthouse-lago')
+    expect(sitemapXML).toContain('hreflang="es"')
+
+    const redirectResponse = await request.get('http://localhost:3000/lago', {
+      maxRedirects: 0,
+    })
+    expect(redirectResponse.status()).toBe(301)
+    expect(redirectResponse.headers().location).toBe('/en/properties/penthouse-lago')
+
+    await page.goto('http://localhost:3000/en/properties/penthouse-lago')
+    const jsonLd = await page.locator('script[type="application/ld+json"]').textContent()
+    expect(jsonLd).toContain('Accommodation')
+    expect(jsonLd).toContain('BreadcrumbList')
+
+    const notFoundResponse = await page.goto(
+      'http://localhost:3000/en/properties/not-a-real-property',
+    )
+    expect(notFoundResponse?.status()).toBe(404)
+    await expect(page.getByRole('heading', { name: 'This page has wandered away.' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Esta página tomó otro camino.' })).toBeVisible()
+  })
+
   test('root redirects to /en and renders the homepage', async ({ page }) => {
     await page.goto('http://localhost:3000')
 

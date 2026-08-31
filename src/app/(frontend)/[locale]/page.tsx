@@ -2,8 +2,10 @@ import type { Metadata } from 'next'
 import React from 'react'
 
 import { getDictionary, isLocale, type Locale } from '@/i18n'
+import { JsonLd } from '@/modules/core/components/JsonLd'
 import { HomePreview } from '@/modules/rentals/components/HomePreview'
 import { getHomePageContent } from '@/modules/rentals/lib/cms-content'
+import { buildWebsiteJsonLd, localizedAlternates } from '@/modules/rentals/lib/seo'
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>
@@ -21,7 +23,7 @@ export async function generateMetadata(props: {
     description,
     alternates: {
       canonical: content.seo?.canonical || `/${locale}`,
-      languages: { en: '/en', es: '/es' },
+      languages: localizedAlternates(),
     },
     openGraph: {
       title,
@@ -43,5 +45,10 @@ export default async function HomePage(props: { params: Promise<{ locale: string
   const t = getDictionary(safeLocale)
   const { content, footer } = await getHomePageContent(safeLocale)
 
-  return <HomePreview content={content} footer={footer} locale={safeLocale} t={t} />
+  return (
+    <>
+      <JsonLd data={buildWebsiteJsonLd(safeLocale, content, footer)} />
+      <HomePreview content={content} footer={footer} locale={safeLocale} t={t} />
+    </>
+  )
 }

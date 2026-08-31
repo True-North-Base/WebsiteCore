@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import React from 'react'
 
 import { getDictionary, isLocale, locales } from '@/i18n'
+import { localizedAlternates, productionSiteURL } from '@/modules/rentals/lib/seo'
 import '../styles.css'
 
 const cormorant = Cormorant_Garamond({
@@ -31,7 +32,7 @@ export async function generateMetadata(props: {
   if (!isLocale(locale)) return {}
   const t = getDictionary(locale)
   return {
-    metadataBase: new URL('https://www.crmariposarentals.com'),
+    metadataBase: new URL(productionSiteURL),
     title: {
       default: `${t.siteName} — ${t.tagline}`,
       template: `%s · ${t.siteName}`,
@@ -39,7 +40,7 @@ export async function generateMetadata(props: {
     description: t.tagline,
     alternates: {
       canonical: `/${locale}`,
-      languages: { en: '/en', es: '/es' },
+      languages: localizedAlternates(),
     },
     openGraph: {
       title: `${t.siteName} — ${t.tagline}`,
