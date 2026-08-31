@@ -219,8 +219,8 @@ const homeContent: Record<Locale, HomeContent> = {
       subtitle: 'Family-run for twenty years. Booked direct — no platform fees.',
       image: `${imageRoot}/photos-1787785691269-ev2k.png`,
       imageAlt: 'Pools and gardens overlooking Costa Rica’s Central Valley at sunset',
-      mobileImage: `${imageRoot}/photos-1787785697872-9y68.png`,
-      mobileImageAlt: 'Private balcony beneath a bright Costa Rican sky',
+      mobileImage: `${imageRoot}/photos-1787785691269-ev2k.png`,
+      mobileImageAlt: 'Pools and gardens overlooking Costa Rica’s Central Valley at sunset',
     },
     featured: {
       title: 'Homes our guests love',
@@ -404,8 +404,8 @@ const homeContent: Record<Locale, HomeContent> = {
         'Una familia anfitriona por veinte años. Reserva directa, sin comisiones de plataforma.',
       image: `${imageRoot}/photos-1787785691269-ev2k.png`,
       imageAlt: 'Piscinas y jardines con vista al Valle Central de Costa Rica al atardecer',
-      mobileImage: `${imageRoot}/photos-1787785697872-9y68.png`,
-      mobileImageAlt: 'Balcón privado bajo un cielo brillante de Costa Rica',
+      mobileImage: `${imageRoot}/photos-1787785691269-ev2k.png`,
+      mobileImageAlt: 'Piscinas y jardines con vista al Valle Central de Costa Rica al atardecer',
     },
     featured: {
       title: 'Las casas favoritas de nuestros huéspedes',

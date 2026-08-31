@@ -169,6 +169,14 @@ test.describe('Frontend', () => {
       .locator('.home-hero')
       .evaluate((element) => Math.round(element.getBoundingClientRect().height))
     expect(heroHeight).toBeLessThanOrEqual(460)
+    await expect(page.locator('.home-hero__image--mobile')).toHaveAttribute(
+      'alt',
+      'Pools and gardens overlooking Costa Rica’s Central Valley at sunset',
+    )
+    await expect(page.locator('.home-hero__shade')).toHaveCSS(
+      'background-image',
+      /linear-gradient/,
+    )
     await expect(page.locator('.property-card').first()).toBeVisible()
     await expect(page.locator('.property-card__image').first()).toHaveCSS('border-radius', '18px')
 
