@@ -50,6 +50,7 @@ export const es: Dictionary = {
     submit: 'Enviar consulta',
     sending: 'Enviando…',
     contactRequirement: 'Incluye un correo o teléfono para que podamos responderte.',
+    honeypot: 'Deja este campo vacío',
     open: '¿Prefieres un formulario? Enviar consulta',
   },
   language: {

@@ -471,6 +471,10 @@ export interface Lead {
   property?: (string | null) | Property;
   locale: 'en' | 'es';
   source: 'contact-form' | 'property-form';
+  /**
+   * Server-generated keyed hash used only for short-window spam throttling. Raw network addresses are not stored.
+   */
+  rateLimitKey?: string | null;
   status: 'new' | 'contacted' | 'closed';
   updatedAt: string;
   createdAt: string;
@@ -774,6 +778,7 @@ export interface LeadsSelect<T extends boolean = true> {
   property?: T;
   locale?: T;
   source?: T;
+  rateLimitKey?: T;
   status?: T;
   updatedAt?: T;
   createdAt?: T;

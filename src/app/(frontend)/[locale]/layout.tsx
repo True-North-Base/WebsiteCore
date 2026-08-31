@@ -69,9 +69,7 @@ export default async function LocaleLayout(props: {
       className={`${cormorant.variable} ${archivo.variable}`}
       data-scroll-behavior="smooth"
     >
-      <body className="bg-sand-100 font-body text-basalt antialiased">
-        <main>{props.children}</main>
-      </body>
+      <body className="bg-sand-100 font-body text-basalt antialiased">{props.children}</body>
     </html>
   )
 }

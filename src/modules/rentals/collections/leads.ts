@@ -30,7 +30,8 @@ export const Leads: CollectionConfig = {
     group: 'Rentals',
     useAsTitle: 'name',
     defaultColumns: ['name', 'property', 'source', 'status', 'createdAt'],
-    description: 'Contact requests submitted through the website. WhatsApp and call clicks are not stored here.',
+    description:
+      'Contact requests submitted through the website. WhatsApp and call clicks are not stored here.',
   },
   access: {
     create: isLoggedIn,
@@ -85,6 +86,16 @@ export const Leads: CollectionConfig = {
         { label: 'General contact form', value: 'contact-form' },
         { label: 'Property inquiry form', value: 'property-form' },
       ],
+    },
+    {
+      name: 'rateLimitKey',
+      type: 'text',
+      index: true,
+      admin: {
+        hidden: true,
+        description:
+          'Server-generated keyed hash used only for short-window spam throttling. Raw network addresses are not stored.',
+      },
     },
     {
       name: 'status',

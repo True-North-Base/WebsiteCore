@@ -171,6 +171,12 @@ Phase 6 adds sanitized JSON-LD using the broad, truthful `Organization`, `Lodgin
 
 Google's current `VacationRental` rich-result contract requires a stable identifier shared across languages, precise latitude and longitude, occupancy, and at least eight photos including bedroom, bathroom, and common-area coverage. Most of the fourteen current property records intentionally have six representative migrated images and several retain unverified occupancy or coordinate fields. Emitting `VacationRental` now would therefore be incomplete or misleading. Activate it property-by-property only after the owner-approved originals and required facts satisfy the full contract and validate in Google's Rich Results Test. This choice does not alter the Property content boundary or introduce reservation functionality.
 
+## D-027 — Public inquiry protection is quiet, privacy-conscious, and database-backed
+
+The public form now uses an off-screen honeypot that silently accepts bot-shaped submissions without creating a Lead. Plausible submissions are limited to five accepted attempts per 15-minute window before a localized validation response is returned. The shared Postgres Lead store supplies the count, so the control works across serverless instances without adding a cache service or relying on unreliable process memory.
+
+The key is an HMAC of the best platform-provided client address (Netlify, then Cloudflare/real/forwarded headers), with normalized email or telephone as a fallback when no valid address is available. The secret is server-only and raw network addresses are never stored. Historical Leads remain valid because the indexed key is nullable. A small concurrent burst may pass before both inserts are visible; that is an accepted trade-off for a conservative inquiry funnel. CAPTCHA remains deferred unless observed abuse shows this layered control is insufficient.
+
 ---
 
 _Template:_

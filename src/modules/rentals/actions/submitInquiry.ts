@@ -1,15 +1,37 @@
 'use server'
 
 import { getPayload } from 'payload'
+import { headers } from 'next/headers'
 
 import config from '@/payload.config'
 
-import { type InquiryFormState, validateInquiry } from '../lib/inquiry'
+import {
+  inquiryLocale,
+  isHoneypotSubmission,
+  type InquiryFormState,
+  validateInquiry,
+} from '../lib/inquiry'
+import {
+  createInquiryRateLimitKey,
+  getClientAddress,
+  isInquiryRateLimited,
+} from '../lib/inquiry-rate-limit'
+
+function successMessage(locale: 'en' | 'es'): string {
+  return locale === 'es'
+    ? 'Gracias. La familia te responderá personalmente.'
+    : 'Thank you. The family will reply personally.'
+}
 
 export async function submitInquiry(
   _previousState: InquiryFormState,
   formData: FormData,
 ): Promise<InquiryFormState> {
+  const locale = inquiryLocale(formData)
+  if (isHoneypotSubmission(formData)) {
+    return { message: successMessage(locale), status: 'success' }
+  }
+
   const result = validateInquiry(formData)
   if (!result.valid) return { errors: result.errors, status: 'error' }
 
@@ -17,6 +39,23 @@ export async function submitInquiry(
 
   try {
     const payload = await getPayload({ config })
+    const requestHeaders = await headers()
+    const rateLimitKey = createInquiryRateLimitKey({
+      clientAddress: getClientAddress(requestHeaders),
+      inquiry,
+      secret: process.env.PAYLOAD_SECRET || payload.secret,
+    })
+
+    if (await isInquiryRateLimited({ key: rateLimitKey, payload })) {
+      return {
+        message:
+          inquiry.locale === 'es'
+            ? 'Has enviado varias consultas recientemente. Inténtalo de nuevo en 15 minutos o usa WhatsApp.'
+            : 'You have sent several inquiries recently. Try again in 15 minutes or use WhatsApp.',
+        status: 'error',
+      }
+    }
+
     let property: string | undefined
 
     if (propertySlug) {
@@ -31,7 +70,10 @@ export async function submitInquiry(
       property = propertyResult.docs[0]?.id
       if (!property) {
         return {
-          message: inquiry.locale === 'es' ? 'Esta propiedad ya no está disponible para consultas.' : 'This property is no longer available for inquiries.',
+          message:
+            inquiry.locale === 'es'
+              ? 'Esta propiedad ya no está disponible para consultas.'
+              : 'This property is no longer available for inquiries.',
           status: 'error',
         }
       }
@@ -41,12 +83,12 @@ export async function submitInquiry(
     // action intentionally uses Local API access override after validating input.
     await payload.create({
       collection: 'leads',
-      data: { ...inquiry, property, status: 'new' },
+      data: { ...inquiry, property, rateLimitKey, status: 'new' },
       overrideAccess: true,
     })
 
     return {
-      message: inquiry.locale === 'es' ? 'Gracias. La familia te responderá personalmente.' : 'Thank you. The family will reply personally.',
+      message: successMessage(inquiry.locale),
       status: 'success',
     }
   } catch (error) {

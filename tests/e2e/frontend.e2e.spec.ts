@@ -195,6 +195,22 @@ test.describe('Frontend', () => {
   })
 
   test('mobile discovery and property photography are touch-first', async ({ page }) => {
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 844 })
+      await page.goto('http://localhost:3000/en')
+      const discoveryFit = await page.locator('.discovery-bar--mobile').evaluate((bar) => {
+        const callToAction = bar.querySelector('strong')
+        if (!callToAction) return null
+        const barBox = bar.getBoundingClientRect()
+        const callToActionBox = callToAction.getBoundingClientRect()
+        return {
+          blankRight: Math.round(barBox.right - callToActionBox.right),
+          hasOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        }
+      })
+      expect(discoveryFit).toEqual({ blankRight: 0, hasOverflow: false })
+    }
+
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('http://localhost:3000/en')
 
@@ -206,10 +222,7 @@ test.describe('Frontend', () => {
       'alt',
       'Pools and gardens overlooking Costa Rica’s Central Valley at sunset',
     )
-    await expect(page.locator('.home-hero__shade')).toHaveCSS(
-      'background-image',
-      /linear-gradient/,
-    )
+    await expect(page.locator('.home-hero__shade')).toHaveCSS('background-image', /linear-gradient/)
     await expect(page.locator('.property-card').first()).toBeVisible()
     await expect(page.locator('.property-card__image').first()).toHaveCSS('border-radius', '18px')
 
@@ -248,5 +261,39 @@ test.describe('Frontend', () => {
       () => document.documentElement.scrollWidth > window.innerWidth,
     )
     expect(hasHorizontalOverflow).toBe(false)
+  })
+
+  test('keyboard focus and essential touch targets remain usable', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('http://localhost:3000/en')
+
+    await expect(page.getByRole('main')).toHaveCount(1)
+    await expect(page.getByRole('banner')).toBeVisible()
+
+    const menu = page.locator('.site-menu summary')
+    await menu.focus()
+    await expect(menu).toBeFocused()
+    await expect(menu).toHaveCSS('outline-style', 'solid')
+    await menu.press('Enter')
+    await expect(page.locator('.site-menu')).toHaveAttribute('open', '')
+    await expect(page.getByRole('navigation', { name: 'Menu' })).toBeVisible()
+
+    const homeTargets = await page
+      .locator('.site-menu summary, .discovery-bar--mobile, .mobile-contact-bar .button')
+      .evaluateAll((elements) =>
+        elements.map((element) => {
+          const box = element.getBoundingClientRect()
+          return { height: Math.round(box.height), width: Math.round(box.width) }
+        }),
+      )
+    expect(homeTargets.every(({ height, width }) => height >= 44 && width >= 44)).toBe(true)
+
+    await page.goto('http://localhost:3000/en/properties')
+    const filterTargets = await page
+      .locator('.catalogue-filters button')
+      .evaluateAll((elements) =>
+        elements.map((element) => Math.round(element.getBoundingClientRect().height)),
+      )
+    expect(filterTargets.every((height) => height >= 44)).toBe(true)
   })
 })

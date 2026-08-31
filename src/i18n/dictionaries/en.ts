@@ -50,6 +50,7 @@ export const en = {
     submit: 'Send inquiry',
     sending: 'Sending…',
     contactRequirement: 'Include either an email address or phone number so we can reply.',
+    honeypot: 'Leave this field empty',
     open: 'Prefer a form? Send an inquiry',
   },
   language: {
