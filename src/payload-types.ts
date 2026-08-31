@@ -69,6 +69,9 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    properties: Property;
+    reviews: Review;
+    leads: Lead;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +81,9 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    properties: PropertiesSelect<false> | PropertiesSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -87,8 +93,24 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'es') | ('en' | 'es')[];
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+    'rental-settings': RentalSetting;
+    'home-page': HomePage;
+    'properties-page': PropertiesPage;
+    'about-page': AboutPage;
+    'property-management-page': PropertyManagementPage;
+    'contact-page': ContactPage;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'rental-settings': RentalSettingsSelect<false> | RentalSettingsSelect<true>;
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
+    'properties-page': PropertiesPageSelect<false> | PropertiesPageSelect<true>;
+    'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
+    'property-management-page': PropertyManagementPageSelect<false> | PropertyManagementPageSelect<true>;
+    'contact-page': ContactPageSelect<false> | ContactPageSelect<true>;
+  };
   locale: 'en' | 'es';
   widgets: {
     collections: CollectionsWidget;
@@ -202,6 +224,258 @@ export interface Media {
   };
 }
 /**
+ * The homes shown on the public website. Drafting a property hides unpublished changes from guests.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties".
+ */
+export interface Property {
+  id: string;
+  /**
+   * Public property name. Brand names are shared across languages.
+   */
+  title: string;
+  /**
+   * URL segment. Generated from the title when left empty; edit only before launch.
+   */
+  slug: string;
+  region: 'central-valley' | 'pacific-coast';
+  /**
+   * Public district only, never the exact street address.
+   */
+  district: string;
+  /**
+   * Optional condominium or community name.
+   */
+  complexName?: string | null;
+  /**
+   * Short image badge, for example Lakeview or Beachfront.
+   */
+  badge?: string | null;
+  /**
+   * The lead paragraph on the property page. Aim for one or two sentences.
+   */
+  shortDescription: string;
+  /**
+   * Two to five useful paragraphs describing the stay.
+   */
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Public district-level context. Do not include the exact address.
+   */
+  neighborhoodDescription?: string | null;
+  /**
+   * Primary card and social image.
+   */
+  heroImage: string | Media;
+  /**
+   * Drag to set display order. The first five create the desktop mosaic.
+   */
+  gallery?:
+    | {
+        image: string | Media;
+        /**
+         * Used to group photos on the public showcase page.
+         */
+        category: 'exterior' | 'living-room' | 'kitchen' | 'bedroom' | 'amenities' | 'other';
+        /**
+         * Include this photo in the opening Showcase tab.
+         */
+        featuredInShowcase?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional district-level map image. Never expose a private address.
+   */
+  mapImage?: (string | null) | Media;
+  bedrooms: number;
+  beds?: number | null;
+  bathrooms: number;
+  /**
+   * Leave blank until the owner confirms the permitted occupancy.
+   */
+  maxGuests?: number | null;
+  /**
+   * Manual OTA average. Keep empty when it cannot be verified.
+   */
+  rating?: number | null;
+  parking?: string | null;
+  /**
+   * Up to two short facts, for example Mezzanine or Lakeview.
+   */
+  extraFacts?:
+    | {
+        fact: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Bedroom cards shown between the property description and amenities.
+   */
+  sleepingArrangements?:
+    | {
+        image: string | Media;
+        roomName: string;
+        /**
+         * Use verified wording, for example “1 queen bed”.
+         */
+        bedSummary: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Group amenities into no more than six clear categories.
+   */
+  amenityGroups?:
+    | {
+        label: string;
+        items?:
+          | {
+              item: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Cancellation terms, house rules, and stay details. Keep wording factual and avoid promises that have not been approved.
+   */
+  thingsToKnow?: {
+    /**
+     * Short public summary shown at first glance.
+     */
+    cancellationSummary?: string | null;
+    /**
+     * Optional explanation revealed by “Read more”.
+     */
+    cancellationDetails?: string | null;
+    checkInTime?: string | null;
+    checkOutTime?: string | null;
+    minStayNights?: number | null;
+    smoking?: string | null;
+    pets?: string | null;
+    events?: string | null;
+    /**
+     * Optional explanation revealed by “Read more”.
+     */
+    propertyRulesDetails?: string | null;
+  };
+  externalListings?:
+    | {
+        platform: 'airbnb' | 'booking' | 'vrbo' | 'expedia' | 'direct';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional approximate point for future map/structured data use.
+   */
+  approxCoordinates?: {
+    latitude?: number | null;
+    longitude?: number | null;
+  };
+  seo?: {
+    /**
+     * Optional browser and search-result title. Keep it specific and under 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Optional search-result summary. Aim for 120–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Optional social-sharing image. The page hero is used when this is empty.
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * Leave empty unless this page should declare a different canonical URL.
+     */
+    canonical?: string | null;
+  };
+  /**
+   * Show this property in “Homes our guests love”.
+   */
+  featured?: boolean | null;
+  /**
+   * Lower numbers appear first.
+   */
+  displayOrder: number;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Only publish genuine guest reviews that CR Mariposa is permitted to reuse.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: string;
+  /**
+   * Original review plus an owner-approved translation in the other locale.
+   */
+  quote: string;
+  guestName: string;
+  guestCountry?: string | null;
+  rating: number;
+  platform: 'airbnb' | 'booking' | 'vrbo' | 'expedia' | 'direct';
+  /**
+   * Leave empty for a general testimonial used only on the homepage.
+   */
+  property?: (string | null) | Property;
+  /**
+   * Surface this review on the homepage.
+   */
+  featured?: boolean | null;
+  /**
+   * Private provenance for editors. Never exposed through the public API.
+   */
+  sourceUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Contact requests submitted through the website. WhatsApp and call clicks are not stored here.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: string;
+  name: string;
+  email?: string | null;
+  phone?: string | null;
+  message?: string | null;
+  /**
+   * Guest-entered free text only. This is not availability data.
+   */
+  requestedDates?: string | null;
+  property?: (string | null) | Property;
+  locale: 'en' | 'es';
+  source: 'contact-form' | 'property-form';
+  status: 'new' | 'contacted' | 'closed';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -232,6 +506,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'properties';
+        value: string | Property;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: string | Review;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: string | Lead;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -364,6 +650,136 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties_select".
+ */
+export interface PropertiesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  region?: T;
+  district?: T;
+  complexName?: T;
+  badge?: T;
+  shortDescription?: T;
+  description?: T;
+  neighborhoodDescription?: T;
+  heroImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        category?: T;
+        featuredInShowcase?: T;
+        id?: T;
+      };
+  mapImage?: T;
+  bedrooms?: T;
+  beds?: T;
+  bathrooms?: T;
+  maxGuests?: T;
+  rating?: T;
+  parking?: T;
+  extraFacts?:
+    | T
+    | {
+        fact?: T;
+        id?: T;
+      };
+  sleepingArrangements?:
+    | T
+    | {
+        image?: T;
+        roomName?: T;
+        bedSummary?: T;
+        id?: T;
+      };
+  amenityGroups?:
+    | T
+    | {
+        label?: T;
+        items?:
+          | T
+          | {
+              item?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  thingsToKnow?:
+    | T
+    | {
+        cancellationSummary?: T;
+        cancellationDetails?: T;
+        checkInTime?: T;
+        checkOutTime?: T;
+        minStayNights?: T;
+        smoking?: T;
+        pets?: T;
+        events?: T;
+        propertyRulesDetails?: T;
+      };
+  externalListings?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  approxCoordinates?:
+    | T
+    | {
+        latitude?: T;
+        longitude?: T;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+        canonical?: T;
+      };
+  featured?: T;
+  displayOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  quote?: T;
+  guestName?: T;
+  guestCountry?: T;
+  rating?: T;
+  platform?: T;
+  property?: T;
+  featured?: T;
+  sourceUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  message?: T;
+  requestedDates?: T;
+  property?: T;
+  locale?: T;
+  source?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -401,6 +817,518 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: string;
+  /**
+   * Public business name shown in navigation and metadata.
+   */
+  siteName: string;
+  /**
+   * Short brand line used in the footer and default metadata.
+   */
+  tagline: string;
+  /**
+   * International digits only, for example 50688255888.
+   */
+  whatsappNumber: string;
+  /**
+   * Human-readable format, for example +506 8825-5888.
+   */
+  phoneDisplay: string;
+  email: string;
+  /**
+   * Business-level location only. Never publish a private property address here.
+   */
+  address?: string | null;
+  instagramUrl?: string | null;
+  facebookUrl?: string | null;
+  /**
+   * Prefilled message for a general stay inquiry. Guests can edit it before sending.
+   */
+  whatsappDefaultMessage: string;
+  defaultSeo?: {
+    /**
+     * Optional browser and search-result title. Keep it specific and under 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Optional search-result summary. Aim for 120–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Optional social-sharing image. The page hero is used when this is empty.
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * Leave empty unless this page should declare a different canonical URL.
+     */
+    canonical?: string | null;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Rental-specific links and wording shared across the public website.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rental-settings".
+ */
+export interface RentalSetting {
+  id: string;
+  /**
+   * Platforms shown in “Find us on”. A blank URL displays a clear placeholder until the owner approves the profile link.
+   */
+  marketplaceLinks?:
+    | {
+        platform: 'airbnb' | 'booking' | 'vrbo' | 'expedia' | 'instagram' | 'facebook' | 'direct';
+        /**
+         * Optional while awaiting owner review. Enter the complete approved profile URL.
+         */
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Short truthful note explaining that dates and terms are confirmed personally.
+   */
+  directBookingNote: string;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * The approved homepage content. Property rows are selected from each Property document.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: string;
+  heroEyebrow?: string | null;
+  heroHeading: string;
+  heroBody: string;
+  heroImage: string | Media;
+  /**
+   * Optional portrait crop. Desktop image is used when empty.
+   */
+  heroMobileImage?: (string | null) | Media;
+  featuredHeading: string;
+  featuredIntro?: string | null;
+  pacificHeading: string;
+  pacificIntro: string;
+  reviewsHeading: string;
+  reviewsProof: string;
+  trustEyebrow: string;
+  trustHeading: string;
+  trustHeadingMuted: string;
+  trustImage: string | Media;
+  trustFeatures?:
+    | {
+        icon: 'home' | 'wifi' | 'message' | 'shield' | 'location' | 'calendar';
+        title: string;
+        body: string;
+        id?: string | null;
+      }[]
+    | null;
+  hospitalityEyebrow: string;
+  hospitalityHeading: string;
+  hospitalityHeadingMuted: string;
+  hospitalityImage: string | Media;
+  hospitalityFeatures?:
+    | {
+        icon: 'home' | 'wifi' | 'message' | 'shield' | 'location' | 'calendar';
+        title: string;
+        body: string;
+        id?: string | null;
+      }[]
+    | null;
+  contactHeading: string;
+  contactBody: string;
+  seo?: {
+    /**
+     * Optional browser and search-result title. Keep it specific and under 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Optional search-result summary. Aim for 120–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Optional social-sharing image. The page hero is used when this is empty.
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * Leave empty unless this page should declare a different canonical URL.
+     */
+    canonical?: string | null;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties-page".
+ */
+export interface PropertiesPage {
+  id: string;
+  heading: string;
+  introduction: string;
+  seo?: {
+    /**
+     * Optional browser and search-result title. Keep it specific and under 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Optional search-result summary. Aim for 120–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Optional social-sharing image. The page hero is used when this is empty.
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * Leave empty unless this page should declare a different canonical URL.
+     */
+    canonical?: string | null;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Published bilingual story, image and search metadata for the About page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page".
+ */
+export interface AboutPage {
+  id: string;
+  heading: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  image?: (string | null) | Media;
+  seo?: {
+    /**
+     * Optional browser and search-result title. Keep it specific and under 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Optional search-result summary. Aim for 120–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Optional social-sharing image. The page hero is used when this is empty.
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * Leave empty unless this page should declare a different canonical URL.
+     */
+    canonical?: string | null;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Owner-approved content for the property-management service page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "property-management-page".
+ */
+export interface PropertyManagementPage {
+  id: string;
+  heading: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  image?: (string | null) | Media;
+  ctaLabel?: string | null;
+  seo?: {
+    /**
+     * Optional browser and search-result title. Keep it specific and under 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Optional search-result summary. Aim for 120–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Optional social-sharing image. The page hero is used when this is empty.
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * Leave empty unless this page should declare a different canonical URL.
+     */
+    canonical?: string | null;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Published bilingual copy and imagery for the Contact page. Contact details remain in Site settings.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page".
+ */
+export interface ContactPage {
+  id: string;
+  heading: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  image?: (string | null) | Media;
+  ctaLabel?: string | null;
+  seo?: {
+    /**
+     * Optional browser and search-result title. Keep it specific and under 70 characters.
+     */
+    title?: string | null;
+    /**
+     * Optional search-result summary. Aim for 120–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Optional social-sharing image. The page hero is used when this is empty.
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * Leave empty unless this page should declare a different canonical URL.
+     */
+    canonical?: string | null;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  tagline?: T;
+  whatsappNumber?: T;
+  phoneDisplay?: T;
+  email?: T;
+  address?: T;
+  instagramUrl?: T;
+  facebookUrl?: T;
+  whatsappDefaultMessage?: T;
+  defaultSeo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+        canonical?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rental-settings_select".
+ */
+export interface RentalSettingsSelect<T extends boolean = true> {
+  marketplaceLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  directBookingNote?: T;
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  heroEyebrow?: T;
+  heroHeading?: T;
+  heroBody?: T;
+  heroImage?: T;
+  heroMobileImage?: T;
+  featuredHeading?: T;
+  featuredIntro?: T;
+  pacificHeading?: T;
+  pacificIntro?: T;
+  reviewsHeading?: T;
+  reviewsProof?: T;
+  trustEyebrow?: T;
+  trustHeading?: T;
+  trustHeadingMuted?: T;
+  trustImage?: T;
+  trustFeatures?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        body?: T;
+        id?: T;
+      };
+  hospitalityEyebrow?: T;
+  hospitalityHeading?: T;
+  hospitalityHeadingMuted?: T;
+  hospitalityImage?: T;
+  hospitalityFeatures?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        body?: T;
+        id?: T;
+      };
+  contactHeading?: T;
+  contactBody?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+        canonical?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties-page_select".
+ */
+export interface PropertiesPageSelect<T extends boolean = true> {
+  heading?: T;
+  introduction?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+        canonical?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page_select".
+ */
+export interface AboutPageSelect<T extends boolean = true> {
+  heading?: T;
+  body?: T;
+  image?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+        canonical?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "property-management-page_select".
+ */
+export interface PropertyManagementPageSelect<T extends boolean = true> {
+  heading?: T;
+  body?: T;
+  image?: T;
+  ctaLabel?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+        canonical?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page_select".
+ */
+export interface ContactPageSelect<T extends boolean = true> {
+  heading?: T;
+  body?: T;
+  image?: T;
+  ctaLabel?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+        canonical?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

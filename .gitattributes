@@ -1,0 +1,3 @@
+# Payload-generated SQL migrations preserve the generator's indentation inside
+# template literals. Do not flag that embedded SQL as source whitespace errors.
+src/migrations/*.ts -whitespace

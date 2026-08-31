@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Archivo, Cormorant_Garamond, Lora } from 'next/font/google'
+import { Archivo, Cormorant_Garamond } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
@@ -10,13 +10,6 @@ const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['400', '600'],
   variable: '--font-cormorant',
-  display: 'swap',
-})
-
-const lora = Lora({
-  subsets: ['latin'],
-  weight: ['400', '600'],
-  variable: '--font-lora',
   display: 'swap',
 })
 
@@ -38,11 +31,27 @@ export async function generateMetadata(props: {
   if (!isLocale(locale)) return {}
   const t = getDictionary(locale)
   return {
+    metadataBase: new URL('https://www.crmariposarentals.com'),
     title: {
       default: `${t.siteName} — ${t.tagline}`,
       template: `%s · ${t.siteName}`,
     },
     description: t.tagline,
+    alternates: {
+      canonical: `/${locale}`,
+      languages: { en: '/en', es: '/es' },
+    },
+    openGraph: {
+      title: `${t.siteName} — ${t.tagline}`,
+      description: t.tagline,
+      images: [{ alt: `${t.siteName} — ${t.tagline}`, url: '/og.png' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${t.siteName} — ${t.tagline}`,
+      description: t.tagline,
+      images: ['/og.png'],
+    },
   }
 }
 
@@ -54,7 +63,11 @@ export default async function LocaleLayout(props: {
   if (!isLocale(locale)) notFound()
 
   return (
-    <html lang={locale} className={`${cormorant.variable} ${lora.variable} ${archivo.variable}`}>
+    <html
+      lang={locale}
+      className={`${cormorant.variable} ${archivo.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body className="bg-sand-100 font-body text-basalt antialiased">
         <main>{props.children}</main>
       </body>

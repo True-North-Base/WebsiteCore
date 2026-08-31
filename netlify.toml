@@ -1,9 +1,11 @@
 # Netlify build configuration. The Next.js runtime is detected automatically.
 # Required env vars (set in Netlify UI, not here): DATABASE_URL (Supabase
-# transaction pooler string), PAYLOAD_SECRET, NEXT_PUBLIC_SERVER_URL.
+# transaction pooler string), PAYLOAD_SECRET, NEXT_PUBLIC_SERVER_URL, and the
+# complete R2 set documented in .env.example. MIGRATION_DATABASE_URL does not
+# belong in the application runtime.
 
 [build]
-command = "pnpm build"
+command = "pnpm generate:importmap && pnpm build"
 
 [build.environment]
 NODE_VERSION = "22"

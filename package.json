@@ -5,6 +5,7 @@
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.19.0",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
@@ -12,8 +13,11 @@
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
+    "migrate:media:r2": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/migrate-media-to-r2.ts",
     "typecheck": "tsc --noEmit",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "seed:phase3": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed-phase3.ts",
+    "seed:phase4": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed-phase4-properties.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
@@ -23,6 +27,7 @@
     "@payloadcms/db-postgres": "3.88.0",
     "@payloadcms/next": "3.88.0",
     "@payloadcms/richtext-lexical": "3.88.0",
+    "@payloadcms/storage-s3": "3.88.0",
     "@payloadcms/ui": "3.88.0",
     "@tailwindcss/postcss": "^4.3.3",
     "cross-env": "^7.0.3",
@@ -53,7 +58,7 @@
     "vitest": "4.0.18"
   },
   "engines": {
-    "node": "^18.20.2 || >=20.9.0",
-    "pnpm": "^9 || ^10 || ^11"
+    "node": ">=20.9.0 <25",
+    "pnpm": "11.19.0"
   }
 }

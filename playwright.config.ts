@@ -6,6 +6,8 @@ import { defineConfig, devices } from '@playwright/test'
  */
 import 'dotenv/config'
 
+const browserChannel = process.env.PLAYWRIGHT_CHANNEL === 'chrome' ? 'chrome' : 'chromium'
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -30,12 +32,24 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
+      use: { ...devices['Desktop Chrome'], channel: browserChannel },
     },
   ],
-  webServer: {
-    command: 'pnpm dev',
-    reuseExistingServer: true,
-    url: 'http://localhost:3000',
-  },
+  webServer: process.env.PLAYWRIGHT_SKIP_WEBSERVER
+    ? undefined
+    : {
+        command: 'node node_modules/next/dist/bin/next dev',
+        // Keep the test runner's tsx loader out of the nested Next CLI process.
+        env: {
+          DATABASE_URL: process.env.PLAYWRIGHT_DATABASE_URL || '',
+          NODE_OPTIONS: '--no-deprecation',
+          R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID || '',
+          R2_BUCKET: process.env.R2_BUCKET || '',
+          R2_ENDPOINT: process.env.R2_ENDPOINT || '',
+          R2_PUBLIC_URL: process.env.R2_PUBLIC_URL || '',
+          R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY || '',
+        },
+        reuseExistingServer: true,
+        url: 'http://localhost:3000',
+      },
 })

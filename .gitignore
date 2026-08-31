@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+.pnpm-store/
 
 # Next.js / Payload build output
 .next/
@@ -30,3 +31,14 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+# Local Netlify folder
+.netlify
+
+# Playwright test output
+playwright-report/
+test-results/
+
+# Local design exports and document-rendering QA
+/Desings/
+/artifacts/**/qa/

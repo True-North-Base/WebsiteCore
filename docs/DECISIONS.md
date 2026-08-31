@@ -8,14 +8,14 @@ Append-only log of significant decisions. Add an entry (D-###) in the PR that ma
 
 Verified against official sources on this date:
 
-| Component | Choice | Basis |
-|---|---|---|
-| Payload | **3.x, latest at install (3.88.0 as of 2026-08-11)** | Actively maintained 3.x line; pin exact version in package.json at scaffold time |
-| Next.js | **16.2.6+ (16.3.x line)** | Payload's documented supported ranges are 15.2.9–15.4.x and **16.2.6+**; Payload 3.88 itself ships against Next 16.3.0 |
-| Node | **22 LTS** | Payload requires ≥ 20.9.0; 22 is the current active LTS, supported by Netlify |
-| Package manager | **pnpm** | Payload's documented preference; yarn 1.x unsupported |
-| Database | **PostgreSQL via `@payloadcms/db-postgres`** | Relational fits the content model; team familiarity |
-| React | Version paired with Next 16 | Comes with the scaffold |
+| Component       | Choice                                               | Basis                                                                                                                  |
+| --------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Payload         | **3.x, latest at install (3.88.0 as of 2026-08-11)** | Actively maintained 3.x line; pin exact version in package.json at scaffold time                                       |
+| Next.js         | **16.2.6+ (16.3.x line)**                            | Payload's documented supported ranges are 15.2.9–15.4.x and **16.2.6+**; Payload 3.88 itself ships against Next 16.3.0 |
+| Node            | **22 LTS**                                           | Payload requires ≥ 20.9.0; 22 is the current active LTS, supported by Netlify                                          |
+| Package manager | **pnpm**                                             | Payload's documented preference; yarn 1.x unsupported                                                                  |
+| Database        | **PostgreSQL via `@payloadcms/db-postgres`**         | Relational fits the content model; team familiarity                                                                    |
+| React           | Version paired with Next 16                          | Comes with the scaffold                                                                                                |
 
 Rule: do **not** blindly bump majors; re-verify Payload's supported-Next range before any Next upgrade (they pin tightly).
 
@@ -67,9 +67,107 @@ Restated as a decision so it's citable: interfaces (`ReservationProvider` etc.) 
 
 The generic `agency-web-starter` is extracted **after** Mariposa ships, from code proven by production use. A `packages/` split today would be organizing code we haven't written for a second client we don't have.
 
+## D-014 — Exact verified version baseline after Phase 1 (2026-08-26)
+
+This re-verification refines D-001 with the exact versions now locked by the completed Phase 1 foundation. It does not authorize an upgrade during this documentation pass.
+
+| Component                     | Exact baseline                                         | Decision                                                                                                                                                                                                                   |
+| ----------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Payload family                | **3.88.0**                                             | Keep `payload` and every `@payloadcms/*` package on the same exact version, including future `@payloadcms/storage-s3`                                                                                                      |
+| Next.js / ESLint config       | **16.3.3**                                             | Exact pin; it is inside Payload's supported `16.2.6+` range and is the current stable security-fixed release                                                                                                               |
+| React / React DOM             | **19.2.6**                                             | Exact versions paired in the current lockfile                                                                                                                                                                              |
+| Node.js                       | **22.23.2 reference patch; deploy on the 22.x line**   | Phase 1 was verified on Node 22. Node 22 is now Maintenance LTS, not Active LTS as D-001 originally stated. Retain it for the current phase; evaluate Node 24 in one controlled upgrade with the full suite before staging |
+| pnpm                          | **11.19.0**                                            | Record in `packageManager` when dependency metadata is next changed; the lockfile remains authoritative meanwhile                                                                                                          |
+| TypeScript                    | **5.7.3**                                              | Exact current compiler baseline                                                                                                                                                                                            |
+| Tailwind CSS / PostCSS plugin | **4.3.3**                                              | Exact resolved baseline; do not accept unreviewed minor drift during a feature branch                                                                                                                                      |
+| Sharp                         | **0.34.2** direct dependency                           | Exact application dependency; transitive copies may differ                                                                                                                                                                 |
+| PostgreSQL                    | **17.11 local reference; Supabase-managed production** | Keep local/staging schema behavior aligned and use generated migrations for shared environments                                                                                                                            |
+
+Why retain Node 22 rather than silently changing it now: both [Payload](https://payloadcms.com/docs/getting-started/installation) and [Next.js 16](https://nextjs.org/docs/app/getting-started/installation) require Node 20.9+, and [Netlify can install a selected Node line or exact release](https://docs.netlify.com/build/configure-builds/manage-dependencies/). Node 24.20.0 is the current Active LTS while Node 22 remains supported LTS ([Node release status](https://nodejs.org/en/about/previous-releases), [Node 24 archive](https://nodejs.org/en/download/archive/v24)). The already-tested runtime is lower risk for Phase 2; the upgrade checkpoint prevents accidental permanent stagnation.
+
+Compatibility evidence: [Payload 3.88.0 release](https://github.com/payloadcms/payload/releases/tag/v3.88.0), [Payload supported Next ranges](https://payloadcms.com/docs/getting-started/installation), [Next.js 16.3.3 release](https://github.com/vercel/next.js/releases/tag/v16.3.3), and [Netlify's maintained Next.js feature matrix](https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/).
+
+Known enforcement gap found by this audit: `package.json` still permits Node 18 even though current Payload and Next.js documentation require Node 20.9+, and it does not declare the selected pnpm version. Netlify is protected by `NODE_VERSION = "22"` and the lockfile records exact dependency resolutions, but the next foundation/tooling change should narrow the Node engine and add `packageManager: "pnpm@11.19.0"`. This documentation-only pass intentionally does not modify application metadata.
+
+## D-015 — Rental-coupled content stays in the Rentals module during V1
+
+The earlier Phase 0 model placed Leads, Reviews, and all static page globals in core. Their actual V1 shapes contain Property relationships, rental-form sources, OTA attribution, or Mariposa-specific page contracts. Keeping those definitions in core would either create a semantic dependency on Rentals or invite factories and polymorphic relationships with no second implementation.
+
+Decision: V1 core contains Users, Media, generic Site Settings, access helpers, and genuinely shared SEO/slug fields. Rentals owns Properties, Leads, Reviews, rental settings, and the typed Mariposa page globals. Phase 9 may extract proven generic subsets after comparing them with a real second site. This preserves the core → rentals import prohibition without speculative abstraction.
+
+## D-016 — Separate production runtime and migration database connections
+
+Netlify runtime functions use Supabase's transaction pooler on port 6543. Migrations, schema inspection, backup/restore, and other administrative work use a controlled direct connection (or session pooler when direct connectivity is unavailable). Supabase explicitly recommends transaction mode for temporary/serverless clients and direct connections for migrations and administrative tools; transaction mode does not support prepared statements or session-level features ([Supabase connection guidance](https://supabase.com/docs/guides/database/connecting-to-postgres)).
+
+The two connection strings are separate server-only environment secrets. Payload's development `push` behavior remains local-only; staging and production schema changes use generated, reviewed migrations through the migration connection. This refines D-003.
+
+## D-017 — R2 public delivery and upload configuration are separate concerns
+
+Production media uses `@payloadcms/storage-s3` **3.88.0** with Cloudflare R2, following Payload's documented Node/Netlify approach. Uploads use the private R2 S3 endpoint with server-only credentials, `region: 'auto'`, and `forcePathStyle: true`. Public images use a distinct `R2_PUBLIC_URL` (prefer a custom domain), `generateFileURL`, and `disablePayloadAccessControl: true`; `next/image` permits only that host. The S3 endpoint is never used as the public asset URL ([Payload storage adapters](https://payloadcms.com/docs/upload/storage-adapters)).
+
+Start with server-mediated uploads. During Phase 5, test the client's real largest originals on Netlify. Enable direct client uploads and an explicit R2 CORS policy only if those tests demonstrate a request-size or reliability need. Do not add a generic storage abstraction: Payload's adapter is already the boundary.
+
+## D-018 — Phase 2 follows 1C Refined and removes the date-shaped availability promise
+
+The repository-held `CR Mariposa 1C Refined.dc.html` is the visual authority for the Phase 2 homepage (3a/3b) and property-detail proof (2d/2e). The implementation translates its typography, palette, square-cut geometry, image-led hierarchy, carousels, gallery, trust content, and mobile contact actions into production components; it does not reproduce the design export's generated runtime.
+
+D-011's open question is resolved conservatively: the homepage discovery control contains **Where** and **Guests**, then navigates to the curated homes section. It has no **When** field, calendar UI, search backend, or availability claim. Phase 4 may turn Where / Guests into client-side filters once all 14 properties exist. A date control can return only when a later explicitly activated capability has honest semantics for it; manual dates may still be included in a WhatsApp or inquiry message.
+
+The proof uses typed rental-owned mock content. Payload integration remains Phase 3, and only Penthouse Lago has a detail route in Phase 2. This prevents unapproved designs and content wiring from multiplying before the client accepts the visual system.
+
+## D-019 — Phase 3 uses concrete CMS contracts with a strict publication boundary
+
+Phase 3 implements concrete collection/global files rather than factories: core owns Site Settings and shared SEO/URL validation; Rentals owns Properties, Reviews, Leads, rental settings, typed page globals, content queries, and the inquiry action. This keeps D-015 enforceable and avoids turning one site's schema into a speculative framework.
+
+Public rendering uses Payload Local API with `overrideAccess: false`, `draft: false`, localized reads, and collection access constrained to published documents. Authenticated editors can see drafts in admin. Collection/global hooks revalidate only when published content may have changed. A development-only fallback preserves the approved Phase 2 preview when the database is missing or unseeded; production database failures are not hidden by mock content.
+
+The local seed deliberately contains the approved homepage, Penthouse Lago, its media, and genuine review examples only. Creating the remaining property/page content is Phase 4 work. The D-014 metadata gap is resolved in this tooling change by declaring `packageManager: pnpm@11.19.0` and narrowing the Node engine to supported `>=20.9.0 <25`.
+
+## D-020 — Inquiry storage has one validated server-only ingress
+
+Unauthenticated REST create access to `leads` is denied. The public form submits to one rental-owned Server Action that treats form data as untrusted, validates length/format/locale/source, resolves an optional published Property by slug, and only then uses the trusted Local API override to create a `new` lead. `requestedDates` remains free text and creates no availability, reservation, calendar, or booking semantics.
+
+The form does not send email, WhatsApp, or notifications. The owner works inquiries in Payload admin. Rate limiting/honeypot controls, approved privacy copy, and a retention/deletion policy remain Phase 6/staging gates; CAPTCHA is introduced only if demonstrated abuse justifies it.
+
+## D-021 — Two concrete trust-section concepts are retained for owner comparison
+
+The owner requested that the approved 1C “Why Mariposa” section remain visible while a second, Wander-inspired hospitality concept is evaluated. The homepage therefore renders both sections temporarily. The alternate uses Mariposa-specific bilingual copy and existing Mariposa imagery; it copies neither Wander's brand language nor its content claims.
+
+Payload exposes this as one explicitly named `hospitality*` field group under **Owner comparison**, alongside the existing `trust*` fields. This is intentionally duplicated, concrete schema—not a reusable section registry, visibility framework, experiment engine, or generic page builder. After the owner chooses a direction, remove the rejected rendering and its unused fields instead of preserving an unneeded abstraction.
+
+## D-022 — Media object keys are canonical; delivery URLs are read-time projections
+
+Payload's cloud-storage plugin normally writes the result of `generateFileURL` into the media table as well as returning it from reads. Persisting a Cloudflare hostname there would turn a delivery choice into canonical content and force a database rewrite when a custom domain or storage provider changes.
+
+The R2 adapter therefore returns only the provider-neutral object key from `generateFileURL`. Payload persists that key for originals and generated sizes. A Media `afterRead` hook prepends `R2_PUBLIC_URL` for the admin, Local/REST APIs, and frontend. Property relationships remain stable Media UUIDs, while the media row's filenames/object keys identify the stored objects. Moving from the temporary R2 development hostname to a custom media domain—or from R2 to another object store—changes configuration and storage credentials, not content rows.
+
+## D-023 — Property photography is rounded selectively and explored touch-first
+
+The owner approved a 2026-08-29 refinement after comparing the mobile site with strong hospitality references. CR Mariposa keeps its warm editorial typography, color, quiet hairlines, and mostly square layout surfaces, while content photography gains an `18px` radius and compact metadata controls may use pills. This is a targeted hospitality-media treatment, not a universal rounded-card redesign.
+
+Property photos follow a deliberate progressive path: the detail page retains its desktop mosaic and uses a native horizontal swipe rail on mobile; selecting any detail-page image enters the localized `/properties/[slug]/photos` route, which presents a CMS-curated Showcase plus category tabs. Selecting an image from that showcase launches the full-screen scroll-snap viewer with keyboard controls on larger screens. Gallery rows carry concrete category and showcase fields rather than deriving meaning from filenames or adding a generic gallery framework.
+
+Property also gains localized `sleepingArrangements` rows with an existing Media relationship, room name, and factual bed summary. These support “Where you'll sleep” without introducing availability, reservation, or booking semantics. Unknown bed sizes remain neutral (“1 bed”) until confirmed by the owner. Existing Media UUID relationships and provider-neutral R2 object keys remain canonical under D-022.
+
+## D-024 — Property logistics are structured, approximate, and never represented by dead links
+
+The owner approved a second 2026-08-29 refinement based on the clarity of Wander's property-logistics presentation. CR Mariposa adopts the information hierarchy, not its booking semantics or copy: `thingsToKnow` now supplies localized **Cancellation & terms**, **Property rules**, and **Stay details** groups. The desktop view uses three hairline-separated columns and mobile preserves the same order as stacked sections. Optional “Read more” controls use real disclosures; cancellation promises and unverified rules are never invented.
+
+Property location context uses Google's official Maps Embed API in an iframe. The implementation uses approximate coordinates with `view` mode when supplied, otherwise a district-level `place` query, and always retains a functional Google Maps search link. Exact addresses remain private. The browser-visible key must be dedicated to Maps Embed, API-restricted, and website-referrer-restricted; without it the designed district-level fallback remains visible. Google documents that an API key and enabled billing account are required even though Maps Embed usage is available without charge ([setup](https://developers.google.com/maps/documentation/embed/get-api-key), [embedding guide](https://developers.google.com/maps/documentation/embed/embedding-map), [key security](https://developers.google.com/maps/api-security-best-practices)).
+
+The rental-settings platform list includes the intended marketplace/social profiles with optional URLs. A blank URL renders a labelled non-clickable placeholder instead of a fake `#` link. The owner can delete a platform during review or supply its approved public URL; only then does it become an external link.
+
+## D-025 — The catalogue filters verified location, not availability
+
+The Phase 4 all-homes page implements the approved 2c editorial pattern: no hero, two 3:2 image columns on desktop, one column on mobile, and eight homes before an explicit reveal of the remaining six. `PropertyCard` gains only a concrete catalogue variant; the page does not introduce a generic grid or filtering framework.
+
+The four chips filter published records by public district/region: All, Santa Ana, Escazú, and Beach. Pacific properties map to Beach; central-valley records containing Escazú or Guachipelín map to Escazú; the remaining central-valley records map to Santa Ana. This small derivation respects the existing D-009 content model instead of adding a second overlapping location taxonomy for fourteen records. A future need for owner-defined regions or more cities would justify an explicit CMS field.
+
+Filters are browser-local discovery only. They make no claim about dates, inventory, reservations, prices, or guest eligibility. Unverified occupancy, ratings, stay times, rules and marketplace links remain absent rather than being estimated. The legacy source audit and its factual conflicts are recorded in `docs/PHASE4_PROPERTY_CONTENT_AUDIT.md` for owner confirmation.
+
 ---
 
-*Template:*
+_Template:_
 
 ```
 ## D-0XX — Title

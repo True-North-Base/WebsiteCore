@@ -13,11 +13,11 @@ Priorities, in order — never trade 1 for 2:
 
 ## Current phase
 
-**Phase 0 done. Next: Phase 1 (foundation scaffold).** See [docs/ROADMAP.md](docs/ROADMAP.md). Do not start work from a later phase without the earlier phase's exit criteria met.
+**Phases 0–2 are implemented. Phase 3 content/CMS implementation is complete; owner admin walkthrough and deferred mobile visual approval remain open. Next after those gates: Phase 4.** See [docs/ROADMAP.md](docs/ROADMAP.md). Do not start work from a later phase without the earlier phase's exit criteria met or explicit owner approval.
 
 ## Stack
 
-Next.js 16 App Router + Payload CMS 3 in a single app · TypeScript · Tailwind · Postgres (Supabase, pooled) · Cloudflare R2 media via `@payloadcms/storage-s3` · Netlify · pnpm · Node 22 LTS. Pinned versions and rationale: [docs/DECISIONS.md](docs/DECISIONS.md).
+Next.js 16 App Router + Payload CMS 3 in a single app · TypeScript · Tailwind · Postgres (Supabase, pooled) · Cloudflare R2 media via `@payloadcms/storage-s3` · Netlify · pnpm · Node 22.x LTS for the completed foundation. Exact pins and the Node 24 checkpoint: [docs/DECISIONS.md](docs/DECISIONS.md#d-014--exact-verified-version-baseline-after-phase-1-2026-08-26).
 
 ## Hard rules
 
@@ -39,8 +39,20 @@ Code is not "done" when written. Before reporting completion: `git diff` reviewe
 
 ## Documentation map
 
+- [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) — product scope, users, current phase, and launch gates
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — system shape, boundaries, repo layout, design reference
 - [docs/CONTENT_MODEL.md](docs/CONTENT_MODEL.md) — collections, globals, fields, redirects
 - [docs/FUTURE_MODULES.md](docs/FUTURE_MODULES.md) — future capabilities and when to introduce abstractions
 - [docs/DECISIONS.md](docs/DECISIONS.md) — decision log (append-only; add an entry when you make a significant choice)
 - [docs/ROADMAP.md](docs/ROADMAP.md) — phase plan with exit criteria
+- [docs/LEARNING.md](docs/LEARNING.md) — concise explanations for the owner's learning context
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

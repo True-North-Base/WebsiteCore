@@ -1,6 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
 import { anyone, isLoggedIn } from '../access'
+import {
+  getR2Config,
+  materializeR2MediaURLs,
+  normalizeR2MediaStorageKeys,
+} from '../storage/r2'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -12,6 +17,20 @@ export const Media: CollectionConfig = {
     create: isLoggedIn,
     update: isLoggedIn,
     delete: isLoggedIn,
+  },
+  hooks: {
+    beforeChange: [
+      ({ data }) => {
+        const r2 = getR2Config()
+        return r2 ? normalizeR2MediaStorageKeys(data, r2.publicURL) : data
+      },
+    ],
+    afterRead: [
+      ({ doc }) => {
+        const r2 = getR2Config()
+        return r2 ? materializeR2MediaURLs(doc, r2.publicURL) : doc
+      },
+    ],
   },
   fields: [
     {

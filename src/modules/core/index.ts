@@ -6,9 +6,13 @@ import type { CollectionConfig, GlobalConfig } from 'payload'
 
 import { Media } from './collections/media'
 import { Users } from './collections/users'
+import { SiteSettings } from './globals/siteSettings'
 
 export const coreCollections: CollectionConfig[] = [Users, Media]
 
-export const coreGlobals: GlobalConfig[] = []
+export const coreGlobals: GlobalConfig[] = [SiteSettings]
 
-export { Media, Users }
+export { anyone, isAdmin, isLoggedIn, isLoggedInField } from './access'
+export { seoFields } from './fields/seo'
+export { isValidHttpUrl } from './validation'
+export { Media, SiteSettings, Users }

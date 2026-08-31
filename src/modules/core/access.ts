@@ -9,6 +9,8 @@ export const isAdminField: FieldAccess = ({ req }) => req.user?.role === 'admin'
 
 export const isLoggedIn: Access = ({ req }) => Boolean(req.user)
 
+export const isLoggedInField: FieldAccess = ({ req }) => Boolean(req.user)
+
 export const isAdminOrSelf: Access = ({ req, id }) => {
   if (req.user?.role === 'admin') return true
   return Boolean(req.user && req.user.id === id)
