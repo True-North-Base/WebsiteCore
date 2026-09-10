@@ -7,7 +7,7 @@ Principle applied throughout: **Property is a content entity with a stable ident
 ## Platform core collections (`src/modules/core`)
 
 ### users
-Payload auth collection. Roles: `admin` (developer), `editor` (owner — full content access, no user/system management). Least privilege from day one.
+Payload auth collection. Roles: `admin` (developer), `editor` (owner — create, edit, publish and unpublish content, but no permanent deletion or user/system management). Least privilege from day one.
 
 ### media
 Upload collection → R2 in production.

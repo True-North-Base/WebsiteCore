@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { isLoggedIn, isValidHttpUrl, seoFields } from '@/modules/core'
+import { isAdmin, isAdminField, isLoggedIn, isValidHttpUrl, seoFields } from '@/modules/core'
 
 import { publishedOrLoggedIn } from '../access'
 import { platformOptions } from '../fields/options'
@@ -18,13 +18,13 @@ export const Properties: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'region', 'featured', 'displayOrder', '_status'],
     description:
-      'The homes shown on the public website. Drafting a property hides unpublished changes from guests.',
+      'The homes shown on the public website. Save unfinished work as a draft, and unpublish a home to hide it. Ask an administrator for permanent deletion.',
   },
   access: {
     create: isLoggedIn,
     read: publishedOrLoggedIn,
     update: isLoggedIn,
-    delete: isLoggedIn,
+    delete: isAdmin,
   },
   hooks: {
     afterChange: [revalidateProperty],
@@ -57,11 +57,27 @@ export const Properties: CollectionConfig = {
               index: true,
               admin: {
                 description:
-                  'URL segment. Generated from the title when left empty; edit only before launch.',
+                  'URL segment. Generated from the title when left empty; only an administrator can change it after creation.',
                 position: 'sidebar',
               },
+              access: {
+                update: isAdminField,
+              },
               hooks: {
-                beforeValidate: [({ data, value }) => slugify(String(value || data?.title || ''))],
+                beforeValidate: [
+                  ({ data, operation, originalDoc, overrideAccess, req, value }) => {
+                    if (
+                      operation === 'update' &&
+                      !overrideAccess &&
+                      req.user?.role !== 'admin' &&
+                      typeof originalDoc?.slug === 'string'
+                    ) {
+                      return originalDoc.slug
+                    }
+
+                    return slugify(String(value || data?.title || ''))
+                  },
+                ],
               },
               validate: (value: null | string | undefined) =>
                 Boolean(value && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) ||

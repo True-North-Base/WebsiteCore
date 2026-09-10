@@ -12,7 +12,16 @@ export const PropertiesPage: GlobalConfig = {
   hooks: { afterChange: [revalidateRentalGlobal] },
   versions: { drafts: true, max: 30 },
   fields: [
-    { name: 'heading', type: 'text', localized: true, required: true },
+    {
+      name: 'heading',
+      type: 'text',
+      localized: true,
+      required: true,
+      admin: {
+        description:
+          'Use {count} where the current number of published properties should appear. The original “Fourteen homes” / “Catorce casas” copy is also kept count-aware.',
+      },
+    },
     { name: 'introduction', type: 'textarea', localized: true, required: true },
     { name: 'seo', type: 'group', label: 'SEO', fields: seoFields },
   ],

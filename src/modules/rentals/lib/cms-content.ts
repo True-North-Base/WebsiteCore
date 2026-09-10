@@ -13,6 +13,7 @@ import type {
 } from '@/payload-types'
 import type { Locale } from '@/i18n'
 
+import { resolveCatalogueHeading } from './catalogue-heading'
 import {
   getFooterContent as getFallbackFooter,
   getHomeContent as getFallbackHome,
@@ -184,14 +185,18 @@ function homeSeo(home: HomePage): SeoContent | undefined {
   }
 }
 
-function catalogueSeo(page: PropertiesPage, firstProperty?: Property): SeoContent | undefined {
+function catalogueSeo(
+  page: PropertiesPage,
+  firstProperty?: Property,
+  resolvedHeading = page.heading,
+): SeoContent | undefined {
   const image = media(page.seo?.ogImage) || media(firstProperty?.heroImage)
   if (!page.seo?.title && !page.seo?.description && !page.seo?.canonical && !image) return undefined
   return {
     canonical: page.seo?.canonical || undefined,
     description: page.seo?.description || page.introduction,
     image,
-    title: page.seo?.title || page.heading,
+    title: page.seo?.title || resolvedHeading,
   }
 }
 
@@ -421,13 +426,19 @@ export const getPropertiesPageContent = cache(
         return { content: fallbackContent, footer: getFallbackFooter(locale) }
       }
 
+      const heading = resolveCatalogueHeading(
+        locale,
+        page._status === 'published' ? page.heading : fallbackContent.heading,
+        cards.length,
+      )
+
       return {
         content: {
-          heading: page._status === 'published' ? page.heading : fallbackContent.heading,
+          heading,
           introduction:
             page._status === 'published' ? page.introduction : fallbackContent.introduction,
           properties: cards,
-          seo: catalogueSeo(page, properties.docs[0]),
+          seo: catalogueSeo(page, properties.docs[0], heading),
           whatsappHref: whatsapp(site.whatsappNumber, site.whatsappDefaultMessage),
         },
         footer: footerFromCms(locale, site, rental),

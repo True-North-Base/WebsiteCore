@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { anyone, isLoggedIn } from '../access'
+import { anyone, isAdmin, isLoggedIn } from '../access'
 import {
   getR2Config,
   materializeR2MediaURLs,
@@ -11,12 +11,14 @@ export const Media: CollectionConfig = {
   slug: 'media',
   admin: {
     group: 'Content',
+    description:
+      'Images used throughout the website. Removing an image from a property does not delete the media record; ask an administrator for permanent deletion.',
   },
   access: {
     read: anyone,
     create: isLoggedIn,
     update: isLoggedIn,
-    delete: isLoggedIn,
+    delete: isAdmin,
   },
   hooks: {
     beforeChange: [

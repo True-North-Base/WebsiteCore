@@ -2,7 +2,7 @@
 
 Production website for [CR Mariposa Rentals](https://www.crmariposarentals.com/) (family-run furnished rentals in Santa Ana, Costa Rica) and the first implementation of a reusable small-business website platform.
 
-**Status: Phase 3 content/CMS is implemented and the Supabase/R2-backed Netlify staging site is live. The owner admin walkthrough and final acceptance of the 2026-08-29 mobile refinement remain open before Phase 4.**
+**Status: The bilingual catalogue, editorial pages, production media, SEO foundation, and launch-hardening work are live on the Supabase/R2-backed Netlify staging site. The client expressed strong visual approval in the 2026-09-09 review; the owner CMS walkthrough, content/privacy approvals, analytics/Search Console, and controlled production-domain cutover remain open.**
 
 ## Two objectives, in priority order
 
@@ -28,5 +28,6 @@ Next.js 16 (App Router) · React · TypeScript · Tailwind CSS · Payload CMS 3 
 | [docs/DECISIONS.md](docs/DECISIONS.md) | Version choices and architectural decisions with rationale |
 | [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) | Approved 1C visual direction, tokens, components, and responsive rules |
 | [docs/CMS_ADMIN_CHECKLIST.md](docs/CMS_ADMIN_CHECKLIST.md) | Owner walkthrough for content, media, publishing, and inquiries |
+| [docs/CLIENT_CMS_QUICKSTART.md](docs/CLIENT_CMS_QUICKSTART.md) | Bilingual client guide for adding, drafting, publishing, and hiding properties |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Phases 1–9 with exit criteria |
 | [docs/LEARNING.md](docs/LEARNING.md) | Plain-language explanations of the architecture being learned |

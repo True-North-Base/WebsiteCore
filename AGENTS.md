@@ -13,7 +13,7 @@ Priorities, in order — never trade 1 for 2:
 
 ## Current phase
 
-**Phases 0–2 are implemented. Phase 3 content/CMS implementation is complete; owner admin walkthrough and deferred mobile visual approval remain open. Next after those gates: Phase 4.** See [docs/ROADMAP.md](docs/ROADMAP.md). Do not start work from a later phase without the earlier phase's exit criteria met or explicit owner approval.
+**Implementation through the Phase 6 launch-hardening work is live on staging. The client expressed strong visual approval in the 2026-09-09 review; the owner CMS walkthrough, remaining content/privacy decisions, analytics/Search Console, and controlled production-domain cutover remain open.** See [docs/ROADMAP.md](docs/ROADMAP.md). Do not treat staging approval as production cutover authority.
 
 ## Stack
 

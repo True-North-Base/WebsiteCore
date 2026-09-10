@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { isLoggedIn, isLoggedInField, isValidHttpUrl } from '@/modules/core'
+import { isAdmin, isLoggedIn, isLoggedInField, isValidHttpUrl } from '@/modules/core'
 
 import { publishedOrLoggedIn } from '../access'
 import { platformOptions } from '../fields/options'
@@ -19,7 +19,7 @@ export const Reviews: CollectionConfig = {
     create: isLoggedIn,
     read: publishedOrLoggedIn,
     update: isLoggedIn,
-    delete: isLoggedIn,
+    delete: isAdmin,
   },
   hooks: {
     afterChange: [revalidateReviews],

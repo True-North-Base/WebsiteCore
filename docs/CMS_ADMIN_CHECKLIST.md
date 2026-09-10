@@ -24,6 +24,7 @@ No approved public content was left changed. The temporary property remains a dr
 - Unpublish/hide the property and confirm public reads no longer expose the document; republish it before finishing.
 - Create a temporary draft property with the required basics, then leave it unpublished. This proves the workflow without adding an unapproved public page.
 - Change **Featured** and **Display order** and confirm the homepage row changes only after publication.
+- The catalogue heading automatically follows the published-property total. When inventory changes, also review exact-count wording in homepage features, About-page prose, and SEO descriptions; those remain owner-managed editorial copy.
 
 ## Photos
 
@@ -33,7 +34,7 @@ No approved public content was left changed. The temporary property remains a dr
 - Drag gallery images to reorder them, save, and confirm the first five update the property mosaic after publishing.
 - Open the public `/photos` route and confirm its Showcase and category tabs reflect those selections without duplicating media records.
 - Remove a gallery relationship and confirm the media item itself is not accidentally deleted.
-- Delete only an intentionally disposable media item; do not delete an image still used by another document.
+- Remove an intentionally disposable media item from its property, then ask an administrator to delete the media record. Client editors cannot permanently delete media or content records; they can unpublish properties instead.
 
 ## Sleeping arrangements
 

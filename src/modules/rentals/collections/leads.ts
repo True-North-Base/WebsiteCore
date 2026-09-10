@@ -1,6 +1,6 @@
 import { ValidationError, type CollectionBeforeValidateHook, type CollectionConfig } from 'payload'
 
-import { isLoggedIn } from '@/modules/core'
+import { isAdmin, isLoggedIn } from '@/modules/core'
 
 const requireEmailOrPhone: CollectionBeforeValidateHook = ({ data, originalDoc, req }) => {
   const email = data && 'email' in data ? data.email : originalDoc?.email
@@ -37,7 +37,7 @@ export const Leads: CollectionConfig = {
     create: isLoggedIn,
     read: isLoggedIn,
     update: isLoggedIn,
-    delete: isLoggedIn,
+    delete: isAdmin,
   },
   hooks: {
     beforeValidate: [requireEmailOrPhone],

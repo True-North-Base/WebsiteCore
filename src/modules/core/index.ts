@@ -12,7 +12,7 @@ export const coreCollections: CollectionConfig[] = [Users, Media]
 
 export const coreGlobals: GlobalConfig[] = [SiteSettings]
 
-export { anyone, isAdmin, isLoggedIn, isLoggedInField } from './access'
+export { anyone, isAdmin, isAdminField, isLoggedIn, isLoggedInField } from './access'
 export { seoFields } from './fields/seo'
 export { isValidHttpUrl } from './validation'
 export { Media, SiteSettings, Users }

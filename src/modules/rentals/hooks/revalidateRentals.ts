@@ -17,6 +17,12 @@ function revalidateHomepages() {
   revalidatePath('/es')
 }
 
+function revalidatePropertyCatalogue() {
+  revalidatePath('/en/properties')
+  revalidatePath('/es/properties')
+  revalidatePath('/sitemap.xml')
+}
+
 function revalidatePropertyPages() {
   revalidatePath('/[locale]/properties/[slug]', 'page')
   revalidatePath('/[locale]/properties/[slug]/photos', 'page')
@@ -34,6 +40,7 @@ export const revalidateProperty: CollectionAfterChangeHook = ({ doc, previousDoc
   if (req.context.skipRevalidation || !shouldRevalidate(doc, previousDoc)) return doc
 
   revalidateHomepages()
+  revalidatePropertyCatalogue()
   revalidatePath(`/en/properties/${doc.slug}`)
   revalidatePath(`/es/properties/${doc.slug}`)
   revalidatePath(`/en/properties/${doc.slug}/photos`)
@@ -52,6 +59,7 @@ export const revalidateProperty: CollectionAfterChangeHook = ({ doc, previousDoc
 export const revalidatePropertyDelete: CollectionAfterDeleteHook = ({ doc, req }) => {
   if (req.context.skipRevalidation) return doc
   revalidateHomepages()
+  revalidatePropertyCatalogue()
   revalidatePath(`/en/properties/${doc.slug}`)
   revalidatePath(`/es/properties/${doc.slug}`)
   revalidatePath(`/en/properties/${doc.slug}/photos`)
