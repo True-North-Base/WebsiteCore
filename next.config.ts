@@ -4,6 +4,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import { getR2Config, getR2ImageRemotePattern } from './src/modules/core/storage/r2'
+import { scopePayloadThemeHeaders } from './src/modules/core/hosting/payload-admin-headers'
 import { legacyRedirects } from './src/modules/rentals/lib/legacy-redirects'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -14,6 +15,7 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1'],
   redirects: async () => [
     { source: '/', destination: '/en', permanent: false },
+    { source: '/favicon.ico', destination: '/icon.svg', permanent: true },
     ...legacyRedirects,
   ],
   experimental: {
@@ -44,4 +46,8 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default withPayload(nextConfig, { devBundleServerPackages: false })
+const payloadConfig = withPayload(nextConfig, { devBundleServerPackages: false })
+const payloadHeaders = payloadConfig.headers
+payloadConfig.headers = async () => scopePayloadThemeHeaders((await payloadHeaders?.()) || [])
+
+export default payloadConfig

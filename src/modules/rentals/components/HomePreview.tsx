@@ -6,6 +6,7 @@ import type { Locale } from '@/i18n'
 
 import type { FooterContent, HomeContent, ReviewContent } from '../lib/phase2-content'
 import { FeatureIcon } from './FeatureIcon'
+import { HomeHeroImage } from './HomeHeroImage'
 import { InquiryForm } from './InquiryForm'
 import { MobileContactBar } from './MobileContactBar'
 import { PropertyCarousel } from './PropertyCarousel'
@@ -83,22 +84,7 @@ export function HomePreview({ content, footer, locale, t }: HomePreviewProps) {
 
       <main>
         <section className="home-hero">
-          <Image
-            alt={content.hero.imageAlt}
-            className="home-hero__image home-hero__image--desktop"
-            fetchPriority="high"
-            fill
-            sizes="(max-width: 640px) 1px, 100vw"
-            src={content.hero.image}
-          />
-          <Image
-            alt={content.hero.mobileImageAlt}
-            className="home-hero__image home-hero__image--mobile"
-            fetchPriority="high"
-            fill
-            sizes="(max-width: 640px) 100vw, 1px"
-            src={content.hero.mobileImage}
-          />
+          <HomeHeroImage hero={content.hero} />
           <div className="home-hero__shade" />
           <div className="home-hero__copy">
             <h1>{content.hero.title}</h1>

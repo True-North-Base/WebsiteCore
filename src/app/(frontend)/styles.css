@@ -193,10 +193,6 @@ summary {
   object-fit: cover;
 }
 
-.home-hero__image--mobile {
-  display: none;
-}
-
 .home-hero__shade {
   background: linear-gradient(
     180deg,
@@ -2236,12 +2232,7 @@ a.site-footer__platform:hover {
     height: clamp(410px, 52svh, 460px);
   }
 
-  .home-hero__image--desktop {
-    display: none;
-  }
-
-  .home-hero__image--mobile {
-    display: block;
+  .home-hero__image {
     object-position: center 54%;
   }
 

@@ -177,6 +177,14 @@ The public form now uses an off-screen honeypot that silently accepts bot-shaped
 
 The key is an HMAC of the best platform-provided client address (Netlify, then Cloudflare/real/forwarded headers), with normalized email or telephone as a fallback when no valid address is available. The secret is server-only and raw network addresses are never stored. Historical Leads remain valid because the indexed key is nullable. A small concurrent burst may pass before both inserts are visible; that is an accepted trade-off for a conservative inquiry funnel. CAPTCHA remains deferred unless observed abuse shows this layered control is insufficient.
 
+## D-028 — Published property pages are pre-rendered without freezing the portfolio
+
+The mobile staging audit found late homepage hero discovery and cold property-page rendering to be the primary remaining performance costs. The hero now uses Next.js 16's documented `getImageProps` art-direction pattern: one eager, high-priority image selected by a native picture source, preserving the desktop/mobile imagery and crops without fetching both candidates.
+
+Property detail and photo pages pre-render every published CMS slug for both parent locales. `force-static` and `dynamicParams: true` retain request-time generation for newly published properties, while the existing exact-path revalidation hooks refresh published edits, unpublishing, and republishing. A configured CMS is authoritative: a missing published property must return not-found rather than resurrecting the local Penthouse Lago seed. The no-database seed remains a development preview only; production static generation requires the database.
+
+Payload 3.88 injects colour-scheme client-hint negotiation globally. Only its three exact theme headers are moved to `/admin/:path*`, preserving admin theme detection and unrelated headers while avoiding a first-visit public-page navigation restart. The property-gallery loading contract is unchanged because its earlier loading experiment regressed. Deployed Lighthouse and publish/unpublish verification remain release checks rather than assumptions.
+
 ---
 
 _Template:_

@@ -64,11 +64,15 @@ Accessibility pass (keyboard, contrast, alt coverage), per-page/property SEO met
 
 **Chunk 2 launch-hardening checkpoint — 2026-08-31:** fixed the narrow mobile discovery-bar gap at 320 px and 390 px; added a silent honeypot and conservative database-backed HMAC rate limit (five accepted attempts per 15 minutes, with raw network addresses never stored); completed automated WCAG 2.1 A/AA plus keyboard/focus/touch-target checks; and reduced competing responsive-image fetches without changing the approved design. The bilingual [CLIENT_ACCEPTANCE_CHECKLIST.md](CLIENT_ACCEPTANCE_CHECKLIST.md) and measured [LAUNCH_QUALITY_REPORT.md](LAUNCH_QUALITY_REPORT.md) record the verification and open approvals. Phase 6 remains open for analytics/Search Console, the final deployed Lighthouse ≥90 measurements, privacy approval, and owner/client acceptance gates.
 
+**Deployed performance checkpoint — 2026-09-14:** the final staging build passed three fresh Lighthouse mobile runs per required route: homepage performance median 96 (LCP 2,529 ms), property median 97 (LCP 2,456 ms), Accessibility/Best Practices 100 throughout, and CLS 0. SEO 69 reflects only the deliberate staging crawl block. All 51 integration tests, lint, typecheck, production build and live EN/ES smoke/mobile checks passed. The mobile ≥90 measurement gate is now met; analytics/Search Console, privacy/content approval and owner/client walkthroughs remain open. See [LAUNCH_QUALITY_REPORT.md](LAUNCH_QUALITY_REPORT.md) and D-028.
+
 ## Phase 7 — Staging & client acceptance
 
 Netlify staging deploy on production infra (Supabase prod DB, R2). Reassess D-005 (admin behavior on Netlify). Give the client an acceptance checklist; collect consolidated feedback; implement approved fixes.
 
 **Staging checkpoint — 2026-08-29:** created the named staging administrator, entered the runtime variables in Netlify, and deployed [cr-mariposa-staging.netlify.app](https://cr-mariposa-staging.netlify.app). Live checks passed for EN/ES homepage, property detail, categorized photo showcase, R2 images, and the Payload login route; the full local Chrome suite passed 9/9. Written owner acceptance is still pending.
+
+**Client editor checkpoint — 2026-09-13/14:** with explicit approval, created the Editor account for `mariposacrtravel@gmail.com` and verified its staging login and property-creation access, without user-management access or permanent content-deletion permission. The temporary credential was kept out of files/Git and was lost when the interrupted session ended; the existing account's empty password-change form is prepared for the administrator to complete securely. Password handoff and the client-led CMS walkthrough remain pending. The bilingual [CLIENT_CMS_QUICKSTART.md](CLIENT_CMS_QUICKSTART.md) covers property/media publishing and account care. No production-domain changes were made.
 
 **Exit:** written client sign-off.
 

@@ -76,4 +76,19 @@ describe('property cache revalidation', () => {
 
     expect(cacheMocks.revalidatePath).not.toHaveBeenCalled()
   })
+
+  it.each([
+    ['published', 'draft'],
+    ['draft', 'published'],
+  ] as const)('refreshes every public route on %s to %s', (previous, next) => {
+    changeProperty({ _status: next, slug: 'existing-home' }, { _status: previous, slug: 'existing-home' })
+
+    for (const locale of ['en', 'es']) {
+      expect(cacheMocks.revalidatePath).toHaveBeenCalledWith(`/${locale}`)
+      expect(cacheMocks.revalidatePath).toHaveBeenCalledWith(`/${locale}/properties`)
+      expect(cacheMocks.revalidatePath).toHaveBeenCalledWith(`/${locale}/properties/existing-home`)
+      expect(cacheMocks.revalidatePath).toHaveBeenCalledWith(`/${locale}/properties/existing-home/photos`)
+    }
+    expect(cacheMocks.revalidatePath).toHaveBeenCalledWith('/sitemap.xml')
+  })
 })

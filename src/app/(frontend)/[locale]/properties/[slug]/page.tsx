@@ -4,8 +4,12 @@ import { notFound } from 'next/navigation'
 import { getDictionary, isLocale } from '@/i18n'
 import { JsonLd } from '@/modules/core/components/JsonLd'
 import { PropertyDetail } from '@/modules/rentals/components/PropertyDetail'
-import { getPropertyPageContent } from '@/modules/rentals/lib/cms-content'
+import { getPropertyPageContent, getPropertyStaticParams } from '@/modules/rentals/lib/cms-content'
 import { buildPropertyJsonLd, localizedAlternates } from '@/modules/rentals/lib/seo'
+
+export const dynamic = 'force-static'
+export const dynamicParams = true
+export const generateStaticParams = getPropertyStaticParams
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string; slug: string }>

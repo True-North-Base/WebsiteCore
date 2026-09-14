@@ -225,6 +225,28 @@ function canReadCms(): boolean {
   return Boolean(process.env.DATABASE_URL)
 }
 
+export const getPropertyStaticParams = cache(async (): Promise<{ slug: string }[]> => {
+  if (!canReadCms()) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('DATABASE_URL is required to generate published property pages')
+    }
+    return [{ slug: 'penthouse-lago' }]
+  }
+
+  const payload = await getPayload({ config })
+  const properties = await payload.find({
+    collection: 'properties',
+    depth: 0,
+    draft: false,
+    limit: 0,
+    overrideAccess: false,
+    pagination: false,
+    select: { slug: true },
+    where: { _status: { equals: 'published' } },
+  })
+  return properties.docs.map(({ slug }) => ({ slug }))
+})
+
 function warnFallback(area: string, error?: unknown) {
   if (process.env.NODE_ENV === 'production') return
   const reason = error instanceof Error ? `: ${error.message}` : ''
@@ -478,7 +500,10 @@ export const getPropertyPageContent = cache(
         }),
       ])
       const property = result.docs[0]
-      if (!property || site._status !== 'published') {
+      // A configured CMS is authoritative: unpublishing must never resurrect a seed page.
+      if (!property) return undefined
+      if (site._status !== 'published') {
+        if (process.env.NODE_ENV === 'production') return undefined
         if (!fallback) return undefined
         warnFallback(`property ${slug} (published CMS seed is incomplete)`)
         return { content: fallback, footer: getFallbackFooter(locale) }
