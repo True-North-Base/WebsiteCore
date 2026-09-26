@@ -23,6 +23,7 @@ export function PropertyCard({
               : '(max-width: 640px) 230px, 264px'
           }
           src={property.image}
+          unoptimized
         />
         {property.badge ? <span className="property-card__badge">{property.badge}</span> : null}
       </div>
