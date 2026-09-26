@@ -13,7 +13,7 @@ Priorities, in order — never trade 1 for 2:
 
 ## Current phase
 
-**Implementation through the Phase 6 launch-hardening work is live on staging. The client expressed strong visual approval in the 2026-09-09 review; the owner CMS walkthrough, remaining content/privacy decisions, analytics/Search Console, and controlled production-domain cutover remain open.** See [docs/ROADMAP.md](docs/ROADMAP.md). Do not treat staging approval as production cutover authority.
+**Production launch was authorized on 2026-09-25. The approved implementation is being consolidated for release; privacy/consent and measurement support are prepared, the production domains are attached in Netlify without DNS changes, and the owner CMS walkthrough plus controlled registrar/DNS cutover remain open.** See [docs/ROADMAP.md](docs/ROADMAP.md). Do not change production DNS until the existing record set is captured and domain access is explicitly available.
 
 ## Stack
 

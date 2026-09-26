@@ -50,8 +50,21 @@ export const es: Dictionary = {
     submit: 'Enviar consulta',
     sending: 'Enviando…',
     contactRequirement: 'Incluye un correo o teléfono para que podamos responderte.',
+    privacyConsent:
+      'Acepto que CR Mariposa use estos datos para responder a mi consulta.',
+    privacyLink: 'Leer el aviso de privacidad',
     honeypot: 'Deja este campo vacío',
     open: '¿Prefieres un formulario? Enviar consulta',
+  },
+  privacy: {
+    title: 'Aviso de privacidad',
+    updated: 'Última actualización: 25 de septiembre de 2026',
+  },
+  analyticsConsent: {
+    body: 'Con tu permiso, usamos Google Analytics para comprender cómo se utiliza el sitio. Es opcional y no se carga a menos que aceptes.',
+    accept: 'Permitir analítica',
+    reject: 'No, gracias',
+    privacyLink: 'Aviso de privacidad',
   },
   language: {
     current: 'Español',

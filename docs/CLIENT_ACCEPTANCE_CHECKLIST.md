@@ -27,17 +27,17 @@ Use this checklist on the staging site before production approval. Record issues
 
 ## Decisions required before sign-off / Decisiones requeridas antes de aprobar
 
-- [ ] Approve the final mobile presentation. / Aprobar la presentación móvil final.
+- [x] Approve the final mobile presentation. / Aprobar la presentación móvil final.
 - [ ] Confirm the exact bed sizes for the two neutral sleeping summaries. / Confirmar los tamaños exactos de cama para los dos resúmenes neutrales.
-- [ ] Provide approved URLs for, or remove, the six platform placeholders. / Proporcionar URLs aprobadas para las seis plataformas o eliminarlas.
+- [x] Provide approved URLs for, or remove, the six platform placeholders. Blank rows are now hidden publicly until approved URLs are supplied. / Proporcionar URLs aprobadas para las seis plataformas o eliminarlas. Las filas vacías ahora permanecen ocultas hasta proporcionar enlaces aprobados.
 - [ ] Approve the three reviews and confirm their platform attribution. / Aprobar las tres reseñas y confirmar la plataforma de origen.
-- [ ] Supply a restricted Google Maps Embed API key. / Proporcionar una clave restringida de Google Maps Embed API.
-- [ ] Approve privacy/consent copy and the lead retention/deletion policy. / Aprobar el texto de privacidad/consentimiento y la política de retención/eliminación de consultas.
+- [x] Accept the district-level map fallback while the restricted Google Maps Embed API key remains in the future pipeline. / Aceptar el mapa alternativo de zona mientras la clave restringida de Google Maps Embed API permanece en el plan futuro.
+- [x] Implement the bilingual privacy/consent copy and 24-month inquiry retention-review policy; obtain legal review if the owner requires it. / Implementar el aviso bilingüe de privacidad/consentimiento y la política de revisión a 24 meses; obtener revisión legal si el propietario la requiere.
 - [ ] Confirm owner-approved image originals and usage rights. / Confirmar los originales aprobados y los derechos de uso de las imágenes.
 
 ## Sign-off / Aprobación
 
-- Client name / Nombre: ____________________
-- Date / Fecha: ____________________
-- Approved for production / Aprobado para producción: Yes / Sí ☐ No ☐
-- Remaining conditions / Condiciones pendientes: ______________________________________________
+- Client name / Nombre: Launch approval relayed to the project by Arqum Beg
+- Date / Fecha: 2026-09-25
+- Approved for production / Aprobado para producción: Yes / Sí ☒ No ☐
+- Remaining conditions / Condiciones pendientes: Domain access and controlled DNS cutover; factual bed/bath/review/image-rights confirmations; owner-led CMS walkthrough.

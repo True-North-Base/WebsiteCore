@@ -66,6 +66,8 @@ Accessibility pass (keyboard, contrast, alt coverage), per-page/property SEO met
 
 **Deployed performance checkpoint — 2026-09-14:** the final staging build passed three fresh Lighthouse mobile runs per required route: homepage performance median 96 (LCP 2,529 ms), property median 97 (LCP 2,456 ms), Accessibility/Best Practices 100 throughout, and CLS 0. SEO 69 reflects only the deliberate staging crawl block. All 51 integration tests, lint, typecheck, production build and live EN/ES smoke/mobile checks passed. The mobile ≥90 measurement gate is now met; analytics/Search Console, privacy/content approval and owner/client walkthroughs remain open. See [LAUNCH_QUALITY_REPORT.md](LAUNCH_QUALITY_REPORT.md) and D-028.
 
+**Launch privacy/measurement checkpoint — 2026-09-25:** added a bilingual privacy notice, explicit form consent, consent-version/timestamp evidence, and a 24-month retention-review date for new inquiries; applied the nullable schema migration to staging; and added consent-gated GA4 plus HTML Search Console verification support. Blank marketplace rows no longer render publicly. The GA4 account, property, and web stream and the Search Console URL-prefix property were created under the authorized Google account; both identifiers are configured in Netlify, while Search Console ownership verification waits for the new build to be served on the production domain. Factual property/review/image-rights confirmations remain owner responsibilities. See [LEAD_DATA_POLICY.md](LEAD_DATA_POLICY.md) and D-029.
+
 ## Phase 7 — Staging & client acceptance
 
 Netlify staging deploy on production infra (Supabase prod DB, R2). Reassess D-005 (admin behavior on Netlify). Give the client an acceptance checklist; collect consolidated feedback; implement approved fixes.
@@ -74,11 +76,15 @@ Netlify staging deploy on production infra (Supabase prod DB, R2). Reassess D-00
 
 **Client editor checkpoint — 2026-09-13/14:** with explicit approval, created the Editor account for `mariposacrtravel@gmail.com` and verified its staging login and property-creation access, without user-management access or permanent content-deletion permission. The temporary credential was kept out of files/Git and was lost when the interrupted session ended; the existing account's empty password-change form is prepared for the administrator to complete securely. Password handoff and the client-led CMS walkthrough remain pending. The bilingual [CLIENT_CMS_QUICKSTART.md](CLIENT_CMS_QUICKSTART.md) covers property/media publishing and account care. No production-domain changes were made.
 
+**Launch authorization and editor reset — 2026-09-25:** production launch authorization was confirmed to the project. The client Editor password was securely reset and the login was independently verified; the temporary credential exists only in an ignored local handoff file. The owner's manual create/update/publish/hide/media walkthrough remains the final CMS acceptance exercise.
+
 **Exit:** written client sign-off.
 
 ## Phase 8 — Production cutover
 
 Record **all** existing DNS first (MX, SPF, DKIM, DMARC, TXT — the domain's email must survive the move). Attach domain, verify SSL, redirects live, forms, analytics, email flow, every major page smoke-tested mobile + desktop. Keep Squarespace paid until verified, then cancel.
+
+**Domain-preparation checkpoint — 2026-09-25:** attached `www.crmariposarentals.com` as the Netlify primary production domain and `crmariposarentals.com` as its alias. No registrar or DNS records were changed, so the public domain continues to serve Squarespace and Netlify TLS remains pending verification. `NEXT_PUBLIC_SERVER_URL` intentionally remains the staging URL until the controlled cutover.
 
 **Exit:** production live on crmariposarentals.com; post-launch monitoring for 1–2 weeks (404 reports in Search Console catch missed redirects).
 

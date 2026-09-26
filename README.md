@@ -2,7 +2,7 @@
 
 Production website for [CR Mariposa Rentals](https://www.crmariposarentals.com/) (family-run furnished rentals in Santa Ana, Costa Rica) and the first implementation of a reusable small-business website platform.
 
-**Status: The bilingual catalogue, editorial pages, production media, SEO foundation, and launch-hardening work are live on the Supabase/R2-backed Netlify staging site. The client expressed strong visual approval in the 2026-09-09 review; the owner CMS walkthrough, content/privacy approvals, analytics/Search Console, and controlled production-domain cutover remain open.**
+**Status: Production launch was authorized on 2026-09-25. The bilingual site, CMS, Supabase/R2 media, SEO, launch hardening, privacy/consent, and measurement integration are prepared on Netlify staging. The owner CMS walkthrough and controlled registrar/DNS cutover remain open; the public domain continues to serve Squarespace until its complete DNS record set is captured.**
 
 ## Two objectives, in priority order
 

@@ -167,6 +167,8 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Images used throughout the website. Removing an image from a property does not delete the media record; ask an administrator for permanent deletion.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -224,7 +226,7 @@ export interface Media {
   };
 }
 /**
- * The homes shown on the public website. Drafting a property hides unpublished changes from guests.
+ * The homes shown on the public website. Save unfinished work as a draft, and unpublish a home to hide it. Ask an administrator for permanent deletion.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "properties".
@@ -236,7 +238,7 @@ export interface Property {
    */
   title: string;
   /**
-   * URL segment. Generated from the title when left empty; edit only before launch.
+   * URL segment. Generated from the title when left empty; only an administrator can change it after creation.
    */
   slug: string;
   region: 'central-valley' | 'pacific-coast';
@@ -475,6 +477,18 @@ export interface Lead {
    * Server-generated keyed hash used only for short-window spam throttling. Raw network addresses are not stored.
    */
   rateLimitKey?: string | null;
+  /**
+   * Electronic consent time recorded when the inquiry was submitted.
+   */
+  privacyConsentAt?: string | null;
+  /**
+   * Version of the public privacy notice accepted by the guest.
+   */
+  privacyNoticeVersion?: string | null;
+  /**
+   * Review or delete this inquiry by this date unless an active stay or legal obligation requires longer retention.
+   */
+  retentionUntil?: string | null;
   status: 'new' | 'contacted' | 'closed';
   updatedAt: string;
   createdAt: string;
@@ -779,6 +793,9 @@ export interface LeadsSelect<T extends boolean = true> {
   locale?: T;
   source?: T;
   rateLimitKey?: T;
+  privacyConsentAt?: T;
+  privacyNoticeVersion?: T;
+  retentionUntil?: T;
   status?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -983,6 +1000,9 @@ export interface HomePage {
  */
 export interface PropertiesPage {
   id: string;
+  /**
+   * Use {count} where the current number of published properties should appear. The original “Fourteen homes” / “Catorce casas” copy is also kept count-aware.
+   */
   heading: string;
   introduction: string;
   seo?: {

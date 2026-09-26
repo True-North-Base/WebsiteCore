@@ -185,6 +185,12 @@ Property detail and photo pages pre-render every published CMS slug for both par
 
 Payload 3.88 injects colour-scheme client-hint negotiation globally. Only its three exact theme headers are moved to `/admin/:path*`, preserving admin theme detection and unrelated headers while avoiding a first-visit public-page navigation restart. The property-gallery loading contract is unchanged because its earlier loading experiment regressed. Deployed Lighthouse and publish/unpublish verification remain release checks rather than assumptions.
 
+## D-029 — Inquiry consent is explicit and analytics is opt-in
+
+The production inquiry form stores personal contact details, so launch uses a concrete bilingual privacy notice and requires an unchecked consent box before submission. New Leads record the notice version, consent timestamp, and a 24-month retention-review date. The fields stay nullable so historical inquiries remain valid; an administrator performs a documented quarterly review and may retain a record longer only for an active relationship, a guest request, or a documented legal obligation. This operational policy requires owner/legal review where appropriate and does not claim to replace Costa Rican legal advice.
+
+Google Analytics is optional and does not load until a visitor explicitly accepts the bilingual analytics notice. The preference remains in that browser; the site uses no advertising-cookie flow. Search Console verification is environment-driven. Blank marketplace rows are kept editable in the CMS but are hidden from the public footer until an approved URL exists, superseding D-024's temporary staging placeholder presentation.
+
 ---
 
 _Template:_

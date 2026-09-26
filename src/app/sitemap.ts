@@ -11,6 +11,7 @@ const staticRoutes = [
   { changeFrequency: 'monthly' as const, path: 'about', priority: 0.6 },
   { changeFrequency: 'monthly' as const, path: 'property-management', priority: 0.6 },
   { changeFrequency: 'monthly' as const, path: 'contact', priority: 0.7 },
+  { changeFrequency: 'yearly' as const, path: 'privacy', priority: 0.3 },
 ]
 
 function languageURLs(path: string) {

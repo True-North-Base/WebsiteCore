@@ -20,13 +20,15 @@ function toHomeSection(locale: Locale, href: string): string {
 
 export function SiteFooter({ content, languageHref, locale, t }: SiteFooterProps) {
   const otherLocale = locale === 'en' ? 'es' : 'en'
+  const linkedPlatforms = content.platforms.filter((platform) => platform.href)
 
   return (
     <footer className="site-footer" id="contact">
-      <div className="site-footer__platforms">
-        <strong>{content.findUsOn}</strong>
-        {content.platforms.map((platform) =>
-          platform.href ? (
+      {linkedPlatforms.length ? (
+        <div className="site-footer__platforms">
+          <strong>{content.findUsOn}</strong>
+          {linkedPlatforms.map((platform) =>
+            platform.href ? (
             <a
               className="site-footer__platform"
               href={platform.href}
@@ -36,18 +38,10 @@ export function SiteFooter({ content, languageHref, locale, t }: SiteFooterProps
             >
               {platform.label} <span aria-hidden="true">↗</span>
             </a>
-          ) : (
-            <span
-              aria-label={`${platform.label}: ${content.platformPlaceholder}`}
-              className="site-footer__platform site-footer__platform--placeholder"
-              key={platform.label}
-            >
-              {platform.label}
-              <small>{content.platformPlaceholder}</small>
-            </span>
-          ),
-        )}
-      </div>
+            ) : null,
+          )}
+        </div>
+      ) : null}
       <div className="site-footer__grid">
         <div className="site-footer__brand">
           <Link className="site-wordmark site-wordmark--dark" href={`/${locale}`}>
@@ -70,6 +64,7 @@ export function SiteFooter({ content, languageHref, locale, t }: SiteFooterProps
               {link.label}
             </a>
           ))}
+          <Link href={`/${locale}/privacy`}>{t.privacy.title}</Link>
         </div>
         <div className="site-footer__column">
           <h2>{content.touchHeading}</h2>

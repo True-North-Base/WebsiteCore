@@ -1,6 +1,12 @@
 import type { Locale } from '@/i18n'
 
-export type InquiryField = 'email' | 'message' | 'name' | 'phone' | 'requestedDates'
+export type InquiryField =
+  | 'email'
+  | 'message'
+  | 'name'
+  | 'phone'
+  | 'privacyConsent'
+  | 'requestedDates'
 export type InquirySource = 'contact-form' | 'property-form'
 
 export type InquiryFormState = {
@@ -54,6 +60,7 @@ export function validateInquiry(
   const message = text(formData, 'message')
   const requestedDates = text(formData, 'requestedDates')
   const propertySlug = text(formData, 'propertySlug')
+  const privacyConsent = text(formData, 'privacyConsent')
   const errors: Partial<Record<InquiryField, string>> = {}
 
   if (name.length < 2) errors.name = requiredMessage(locale)
@@ -77,6 +84,12 @@ export function validateInquiry(
   if (requestedDates.length > 120) {
     errors.requestedDates =
       locale === 'es' ? 'Usa 120 caracteres o menos.' : 'Use 120 characters or fewer.'
+  }
+  if (privacyConsent !== 'accepted') {
+    errors.privacyConsent =
+      locale === 'es'
+        ? 'Confirma que podemos usar tus datos para responder a la consulta.'
+        : 'Confirm that we may use your details to answer the inquiry.'
   }
   const validPropertySlug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(propertySlug)
   if (source === 'property-form' && !validPropertySlug) {

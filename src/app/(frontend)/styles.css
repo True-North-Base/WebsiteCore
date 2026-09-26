@@ -1974,6 +1974,133 @@ a.site-footer__platform:hover {
   opacity: 0.65;
 }
 
+.inquiry-form__consent {
+  align-items: flex-start;
+  display: grid !important;
+  grid-template-columns: 18px 1fr;
+  gap: 10px;
+}
+
+.inquiry-form__consent input {
+  height: 18px;
+  margin-top: 2px;
+  min-height: 18px;
+  padding: 0;
+  width: 18px;
+}
+
+.inquiry-form__consent span {
+  font-size: 0.78rem;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.55;
+  text-transform: none !important;
+}
+
+.inquiry-form__consent a,
+.privacy-page a,
+.analytics-consent a {
+  border-bottom: 1px solid currentColor;
+}
+
+.inquiry-form__consent .inquiry-form__error {
+  grid-column: 2;
+}
+
+.privacy-page {
+  background: var(--sand-light);
+  min-height: 100vh;
+  padding: clamp(32px, 7vw, 96px) 20px;
+}
+
+.privacy-page__content {
+  margin: 0 auto;
+  max-width: 760px;
+}
+
+.privacy-page__back,
+.privacy-page__updated {
+  color: var(--stone);
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 0.8rem;
+}
+
+.privacy-page h1 {
+  font-family: var(--font-cormorant), serif;
+  font-size: clamp(3.2rem, 9vw, 6rem);
+  font-weight: 400;
+  line-height: 0.95;
+  margin: 48px 0 12px;
+}
+
+.privacy-page__intro {
+  font-size: 1.12rem;
+  line-height: 1.75;
+  margin: 32px 0 48px;
+}
+
+.privacy-page section {
+  border-top: 1px solid var(--hairline);
+  padding: 32px 0;
+}
+
+.privacy-page h2 {
+  font-family: var(--font-cormorant), serif;
+  font-size: 2rem;
+  font-weight: 400;
+  margin: 0 0 14px;
+}
+
+.privacy-page section p {
+  color: var(--body-copy);
+  line-height: 1.75;
+  margin: 0 0 14px;
+}
+
+.analytics-consent {
+  background: #fffdf8;
+  border: 1px solid var(--hairline);
+  bottom: 18px;
+  box-shadow: 0 18px 50px rgb(20 27 20 / 18%);
+  display: grid;
+  gap: 16px;
+  left: 50%;
+  max-width: 720px;
+  padding: 18px;
+  position: fixed;
+  transform: translateX(-50%);
+  width: calc(100% - 36px);
+  z-index: 100;
+}
+
+.analytics-consent p {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.analytics-consent__actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.analytics-consent .button {
+  min-height: 46px;
+  padding: 0 20px;
+}
+
+.analytics-consent__reject {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  cursor: pointer;
+  font-family: var(--font-archivo), sans-serif;
+  padding: 4px 0;
+}
+
 .inquiry-card .inquiry-form__row {
   grid-template-columns: 1fr;
 }

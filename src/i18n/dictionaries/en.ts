@@ -50,8 +50,20 @@ export const en = {
     submit: 'Send inquiry',
     sending: 'Sending…',
     contactRequirement: 'Include either an email address or phone number so we can reply.',
+    privacyConsent: 'I agree that CR Mariposa may use these details to answer my inquiry.',
+    privacyLink: 'Read the privacy notice',
     honeypot: 'Leave this field empty',
     open: 'Prefer a form? Send an inquiry',
+  },
+  privacy: {
+    title: 'Privacy notice',
+    updated: 'Last updated September 25, 2026',
+  },
+  analyticsConsent: {
+    body: 'With your permission, we use Google Analytics to understand how visitors use the site. It is optional and is not loaded unless you accept.',
+    accept: 'Allow analytics',
+    reject: 'No thanks',
+    privacyLink: 'Privacy notice',
   },
   language: {
     current: 'English',

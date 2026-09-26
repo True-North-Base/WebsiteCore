@@ -2,6 +2,7 @@ import * as migration_20260828_034315_initial_phase3_schema from './20260828_034
 import * as migration_20260829_225445_mobile_gallery_refinement from './20260829_225445_mobile_gallery_refinement';
 import * as migration_20260830_033457_property_information_refinement from './20260830_033457_property_information_refinement';
 import * as migration_20260831_161606_launch_hardening_chunk_2 from './20260831_161606_launch_hardening_chunk_2';
+import * as migration_20260925_120000_lead_privacy_consent from './20260925_120000_lead_privacy_consent';
 
 export const migrations = [
   {
@@ -23,5 +24,10 @@ export const migrations = [
     up: migration_20260831_161606_launch_hardening_chunk_2.up,
     down: migration_20260831_161606_launch_hardening_chunk_2.down,
     name: '20260831_161606_launch_hardening_chunk_2',
+  },
+  {
+    up: migration_20260925_120000_lead_privacy_consent.up,
+    down: migration_20260925_120000_lead_privacy_consent.down,
+    name: '20260925_120000_lead_privacy_consent',
   },
 ];

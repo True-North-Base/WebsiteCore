@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import React from 'react'
 
 import { getDictionary, isLocale, locales } from '@/i18n'
+import { AnalyticsConsent } from '@/modules/core/components/AnalyticsConsent'
 import { localizedAlternates, productionSiteURL } from '@/modules/rentals/lib/seo'
 import '../styles.css'
 
@@ -42,6 +43,9 @@ export async function generateMetadata(props: {
       canonical: `/${locale}`,
       languages: localizedAlternates(),
     },
+    verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+      : undefined,
     openGraph: {
       title: `${t.siteName} — ${t.tagline}`,
       description: t.tagline,
@@ -69,7 +73,14 @@ export default async function LocaleLayout(props: {
       className={`${cormorant.variable} ${archivo.variable}`}
       data-scroll-behavior="smooth"
     >
-      <body className="bg-sand-100 font-body text-basalt antialiased">{props.children}</body>
+      <body className="bg-sand-100 font-body text-basalt antialiased">
+        {props.children}
+        <AnalyticsConsent
+          locale={locale}
+          measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}
+          t={getDictionary(locale).analyticsConsent}
+        />
+      </body>
     </html>
   )
 }

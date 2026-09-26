@@ -98,6 +98,33 @@ export const Leads: CollectionConfig = {
       },
     },
     {
+      name: 'privacyConsentAt',
+      type: 'date',
+      admin: {
+        readOnly: true,
+        description: 'Electronic consent time recorded when the inquiry was submitted.',
+      },
+    },
+    {
+      name: 'privacyNoticeVersion',
+      type: 'text',
+      admin: {
+        readOnly: true,
+        description: 'Version of the public privacy notice accepted by the guest.',
+      },
+    },
+    {
+      name: 'retentionUntil',
+      type: 'date',
+      index: true,
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+        description:
+          'Review or delete this inquiry by this date unless an active stay or legal obligation requires longer retention.',
+      },
+    },
+    {
       name: 'status',
       type: 'select',
       required: true,

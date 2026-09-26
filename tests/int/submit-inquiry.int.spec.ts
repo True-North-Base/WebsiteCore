@@ -24,6 +24,7 @@ function inquiryForm(overrides: Record<string, string> = {}): FormData {
     email: 'guest@example.com',
     locale: 'en',
     name: 'Guest',
+    privacyConsent: 'accepted',
     source: 'contact-form',
     ...overrides,
   }
@@ -67,7 +68,10 @@ describe('inquiry server action spam controls', () => {
         collection: 'leads',
         data: expect.objectContaining({
           email: 'guest@example.com',
+          privacyConsentAt: expect.any(String),
+          privacyNoticeVersion: '2026-09-25',
           rateLimitKey: expect.stringMatching(/^[a-f0-9]{64}$/),
+          retentionUntil: expect.any(String),
           status: 'new',
         }),
         overrideAccess: true,

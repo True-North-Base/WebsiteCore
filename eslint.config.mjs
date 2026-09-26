@@ -44,6 +44,7 @@ const eslintConfig = defineConfig([
   },
   {
     ignores: [
+      '.claude/worktrees/',
       '.next/',
       '.netlify/',
       'Desings/',

@@ -1,6 +1,7 @@
 'use client'
 
 import { useActionState, useEffect, useId, useRef } from 'react'
+import Link from 'next/link'
 
 import type { Dictionary } from '@/i18n/dictionaries/en'
 import type { Locale } from '@/i18n'
@@ -120,6 +121,16 @@ export function InquiryForm({ locale, propertySlug, source, t }: InquiryFormProp
           rows={4}
         />
         {error('message')}
+      </label>
+      <label className="inquiry-form__consent">
+        <input name="privacyConsent" required type="checkbox" value="accepted" />
+        <span>
+          {t.privacyConsent}{' '}
+          <Link href={`/${locale}/privacy`} target="_blank">
+            {t.privacyLink}
+          </Link>
+        </span>
+        {error('privacyConsent')}
       </label>
       <button className="button button--dark" disabled={pending} type="submit">
         {pending ? t.sending : t.submit}

@@ -59,7 +59,7 @@ describe('SEO and cutover infrastructure', () => {
     const entries = await sitemap()
     const propertyEntries = entries.filter((entry) => entry.url.includes('/properties/'))
 
-    expect(entries).toHaveLength(38)
+    expect(entries).toHaveLength(40)
     expect(propertyEntries).toHaveLength(28)
     expect(entries.every((entry) => entry.url.startsWith(productionSiteURL))).toBe(true)
     expect(

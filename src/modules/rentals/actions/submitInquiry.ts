@@ -17,6 +17,15 @@ import {
   isInquiryRateLimited,
 } from '../lib/inquiry-rate-limit'
 
+const PRIVACY_NOTICE_VERSION = '2026-09-25'
+const LEAD_RETENTION_MONTHS = 24
+
+function retentionDate(now = new Date()): string {
+  const retention = new Date(now)
+  retention.setUTCMonth(retention.getUTCMonth() + LEAD_RETENTION_MONTHS)
+  return retention.toISOString()
+}
+
 function successMessage(locale: 'en' | 'es'): string {
   return locale === 'es'
     ? 'Gracias. La familia te responderá personalmente.'
@@ -83,7 +92,15 @@ export async function submitInquiry(
     // action intentionally uses Local API access override after validating input.
     await payload.create({
       collection: 'leads',
-      data: { ...inquiry, property, rateLimitKey, status: 'new' },
+      data: {
+        ...inquiry,
+        privacyConsentAt: new Date().toISOString(),
+        privacyNoticeVersion: PRIVACY_NOTICE_VERSION,
+        property,
+        rateLimitKey,
+        retentionUntil: retentionDate(),
+        status: 'new',
+      },
       overrideAccess: true,
     })
 

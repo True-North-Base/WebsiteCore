@@ -23,6 +23,7 @@ describe('inquiry validation', () => {
         locale: 'es',
         name: 'Elena',
         propertySlug: 'penthouse-lago',
+        privacyConsent: 'accepted',
         requestedDates: '10–17 de marzo',
         source: 'property-form',
       }),
@@ -41,7 +42,9 @@ describe('inquiry validation', () => {
   })
 
   it('requires a name and at least one reply channel', () => {
-    const result = validateInquiry(form({ locale: 'en', source: 'contact-form' }))
+    const result = validateInquiry(
+      form({ locale: 'en', privacyConsent: 'accepted', source: 'contact-form' }),
+    )
 
     expect(result.valid).toBe(false)
     if (!result.valid) {
@@ -57,6 +60,7 @@ describe('inquiry validation', () => {
         email: 'not-an-email',
         locale: 'en',
         name: 'Guest',
+        privacyConsent: 'accepted',
         requestedDates: 'x'.repeat(121),
         source: 'contact-form',
       }),
@@ -75,6 +79,7 @@ describe('inquiry validation', () => {
         email: 'guest@example.com',
         locale: 'en',
         name: 'Guest',
+        privacyConsent: 'accepted',
         propertySlug: '../admin',
         source: 'property-form',
       }),
@@ -87,6 +92,15 @@ describe('inquiry validation', () => {
   it('detects the hidden honeypot without affecting normal submissions', () => {
     expect(isHoneypotSubmission(form({ website: '' }))).toBe(false)
     expect(isHoneypotSubmission(form({ website: 'https://spam.example' }))).toBe(true)
+  })
+
+  it('requires explicit privacy consent', () => {
+    const result = validateInquiry(
+      form({ email: 'guest@example.com', locale: 'en', name: 'Guest', source: 'contact-form' }),
+    )
+
+    expect(result.valid).toBe(false)
+    if (!result.valid) expect(result.errors.privacyConsent).toMatch(/confirm/i)
   })
 
   it('uses a keyed, non-reversible rate-limit identity and trusted client headers', () => {
