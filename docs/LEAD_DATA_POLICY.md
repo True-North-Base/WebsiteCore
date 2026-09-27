@@ -1,6 +1,6 @@
 # CR Mariposa inquiry-data policy
 
-Effective date: 2026-09-25. This operational policy supports the public bilingual privacy notice and should be reviewed with the business owner and Costa Rican counsel. It is not a substitute for legal advice.
+Effective date: 2026-09-27. This operational policy supports the public bilingual privacy notice and should be reviewed with the business owner and Costa Rican counsel. It is not a substitute for legal advice.
 
 ## Purpose and access
 
@@ -12,6 +12,8 @@ Effective date: 2026-09-25. This operational policy supports the public bilingua
 ## Consent evidence
 
 Every new public-form inquiry records the accepted privacy-notice version, consent timestamp, and retention review date. A submission without explicit consent is rejected. WhatsApp, telephone, and email conversations remain governed by the notice supplied through those channels.
+
+After the Lead is saved, the website may send the family a transactional notification through the configured inquiry-email delivery provider. The notification contains only the submitted inquiry details needed to respond. Payload remains the system of record; a delivery outage does not remove the Lead or ask the visitor to submit it again.
 
 ## Retention and deletion
 

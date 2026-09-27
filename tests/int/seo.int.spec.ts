@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import sitemap from '../../src/app/sitemap'
 import robots from '../../src/app/robots'
 import { serializeJsonLd } from '../../src/modules/core/components/JsonLd'
+import { getPropertyStaticParams } from '../../src/modules/rentals/lib/cms-content'
 import { legacyRedirects } from '../../src/modules/rentals/lib/legacy-redirects'
 import {
   buildPropertyJsonLd,
@@ -56,11 +57,11 @@ describe('SEO and cutover infrastructure', () => {
   })
 
   it('lists every published property in both languages with hreflang alternates', async () => {
-    const entries = await sitemap()
+    const [entries, publishedProperties] = await Promise.all([sitemap(), getPropertyStaticParams()])
     const propertyEntries = entries.filter((entry) => entry.url.includes('/properties/'))
 
-    expect(entries).toHaveLength(40)
-    expect(propertyEntries).toHaveLength(28)
+    expect(entries).toHaveLength(12 + publishedProperties.length * 2)
+    expect(propertyEntries).toHaveLength(publishedProperties.length * 2)
     expect(entries.every((entry) => entry.url.startsWith(productionSiteURL))).toBe(true)
     expect(
       entries.every((entry) => {

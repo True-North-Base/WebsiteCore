@@ -58,7 +58,7 @@ export const es: Dictionary = {
   },
   privacy: {
     title: 'Aviso de privacidad',
-    updated: 'Última actualización: 25 de septiembre de 2026',
+    updated: 'Última actualización: 27 de septiembre de 2026',
   },
   analyticsConsent: {
     body: 'Con tu permiso, usamos Google Analytics para comprender cómo se utiliza el sitio. Es opcional y no se carga a menos que aceptes.',

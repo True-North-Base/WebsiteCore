@@ -17,7 +17,7 @@ import {
   isInquiryRateLimited,
 } from '../lib/inquiry-rate-limit'
 
-const PRIVACY_NOTICE_VERSION = '2026-09-25'
+const PRIVACY_NOTICE_VERSION = '2026-09-27'
 const LEAD_RETENTION_MONTHS = 24
 
 function retentionDate(now = new Date()): string {

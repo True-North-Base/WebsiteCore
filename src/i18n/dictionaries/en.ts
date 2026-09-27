@@ -57,7 +57,7 @@ export const en = {
   },
   privacy: {
     title: 'Privacy notice',
-    updated: 'Last updated September 25, 2026',
+    updated: 'Last updated September 27, 2026',
   },
   analyticsConsent: {
     body: 'With your permission, we use Google Analytics to understand how visitors use the site. It is optional and is not loaded unless you accept.',

@@ -69,7 +69,7 @@ describe('inquiry server action spam controls', () => {
         data: expect.objectContaining({
           email: 'guest@example.com',
           privacyConsentAt: expect.any(String),
-          privacyNoticeVersion: '2026-09-25',
+          privacyNoticeVersion: '2026-09-27',
           rateLimitKey: expect.stringMatching(/^[a-f0-9]{64}$/),
           retentionUntil: expect.any(String),
           status: 'new',

@@ -191,6 +191,12 @@ The production inquiry form stores personal contact details, so launch uses a co
 
 Google Analytics is optional and does not load until a visitor explicitly accepts the bilingual analytics notice. The preference remains in that browser; the site uses no advertising-cookie flow. Search Console verification is environment-driven. Blank marketplace rows are kept editable in the CMS but are hidden from the public footer until an approved URL exists, superseding D-024's temporary staging placeholder presentation.
 
+## D-030 — Inquiry email is a notification after durable storage
+
+The owner explicitly activated email notification for public enquiries after the launch workflow proved Payload Lead storage and client access. The existing validated Server Action remains the only public ingress and does not send email itself. A rental-owned `afterChange` hook reacts only to Lead creation and calls one concrete Resend delivery helper; no generic notification provider, queue, messaging workflow, or WhatsApp automation is introduced.
+
+Payload is the system of record. The hook catches provider, timeout, and property-title lookup failures so a stored Lead still returns success and does not invite a duplicate submission. Resend delivery is disabled unless the API key, recipient, and a verified-domain sender are all configured. Phone-only enquiries omit `reply_to`; delivery uses plain text, the saved Lead ID as a 24-hour idempotency key, and no raw rate-limit identity. The bilingual privacy notice names inquiry-email delivery and new submissions record notice version `2026-09-27`.
+
 ---
 
 _Template:_

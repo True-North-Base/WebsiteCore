@@ -27,7 +27,7 @@ const content = {
         heading: 'Consent and sharing',
         paragraphs: [
           'Submitting the form requires your express consent to use the information for the purposes above. You may withdraw that consent by contacting us. We do not sell your information.',
-          'Our website, database, and media service providers may process information only as needed to operate and secure the service. We disclose information to another party only when you authorize it or when the law requires it.',
+          'Our website, database, media, and inquiry-email delivery providers may process information only as needed to operate and secure the service and notify the family of your request. We disclose information to another party only when you authorize it or when the law requires it.',
         ],
       },
       {
@@ -72,7 +72,7 @@ const content = {
         heading: 'Consentimiento y divulgación',
         paragraphs: [
           'Para enviar el formulario debes aceptar expresamente el uso de tus datos para los fines anteriores. Puedes retirar ese consentimiento contactándonos. No vendemos tu información.',
-          'Los proveedores del sitio web, base de datos y almacenamiento de medios pueden procesar información únicamente cuando sea necesario para operar y proteger el servicio. Solo comunicamos información a otra parte con tu autorización o cuando la ley lo exige.',
+          'Los proveedores del sitio web, base de datos, almacenamiento de medios y entrega de correos de consultas pueden procesar información únicamente cuando sea necesario para operar y proteger el servicio y avisar a la familia sobre tu solicitud. Solo comunicamos información a otra parte con tu autorización o cuando la ley lo exige.',
         ],
       },
       {

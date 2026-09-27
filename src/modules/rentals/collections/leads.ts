@@ -2,6 +2,8 @@ import { ValidationError, type CollectionBeforeValidateHook, type CollectionConf
 
 import { isAdmin, isLoggedIn } from '@/modules/core'
 
+import { notifyInquiryAfterCreate } from '../hooks/notifyInquiry'
+
 const requireEmailOrPhone: CollectionBeforeValidateHook = ({ data, originalDoc, req }) => {
   const email = data && 'email' in data ? data.email : originalDoc?.email
   const phone = data && 'phone' in data ? data.phone : originalDoc?.phone
@@ -40,6 +42,7 @@ export const Leads: CollectionConfig = {
     delete: isAdmin,
   },
   hooks: {
+    afterChange: [notifyInquiryAfterCreate],
     beforeValidate: [requireEmailOrPhone],
   },
   fields: [
