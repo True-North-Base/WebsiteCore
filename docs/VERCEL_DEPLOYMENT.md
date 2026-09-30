@@ -42,7 +42,7 @@ Add `https://www.crmariposarentals.com` before production admin use, and specifi
 
 ## GitHub
 
-The repository transfer is complete: [True-North-Base/WebsiteCore](https://github.com/True-North-Base/WebsiteCore). Name, public visibility, branches and history were retained; the local origin now points to the organization. The Vercel GitHub app installation is prepared with **WebsiteCore only** selected and awaits owner approval before granting its displayed permissions. Reconnect Vercel after installation. Until Git integration is verified, deploy through the authorized CLI; do not claim pushes automatically deploy.
+The repository transfer is complete: [True-North-Base/WebsiteCore](https://github.com/True-North-Base/WebsiteCore). Name, public visibility, branches and history were retained; the local origin now points to the organization. The owner installed the Vercel GitHub app with **WebsiteCore only** selected; the installed scope was independently checked without changing permissions. Vercel's project link is GitHub / True-North-Base / WebsiteCore, with `main` as its production branch. Main targets the stable staging alias; other branches use authenticated preview deployments. No client domain or DNS record was changed by this connection. Validate the Vercel commit status and deployment's Git SHA after source pushes; keep CLI deployment available for an explicitly authorized fallback.
 
 ## Domain cutover — not performed yet
 

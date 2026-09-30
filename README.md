@@ -2,7 +2,7 @@
 
 Production website for [CR Mariposa Rentals](https://www.crmariposarentals.com/) (family-run furnished rentals in Santa Ana, Costa Rica) and the first implementation of a reusable small-business website platform.
 
-**Status: The bilingual site and CMS are deployed to [Vercel staging](https://cr-mariposa-staging.vercel.app/en) under True North Base. The 2026-09-30 migration checks passed, including authenticated 6 MiB direct photo uploads and all generated image sizes. GitHub repository ownership is now True-North-Base; automatic deployment setup is awaiting the repository-scoped app approval. Existing Supabase data, R2 media and accounts are retained. Netlify is a temporary fallback; the public domain still serves Squarespace pending controlled DNS cutover.**
+**Status: The bilingual site and CMS are deployed to [Vercel staging](https://cr-mariposa-staging.vercel.app/en) under True North Base. The 2026-09-30 migration checks passed, including authenticated 6 MiB direct photo uploads and all generated image sizes. GitHub repository ownership is now True-North-Base; Vercel's GitHub app is approved for WebsiteCore only and the project is connected to main. Existing Supabase data, R2 media and accounts are retained. Netlify is a temporary fallback; the public domain still serves Squarespace pending controlled DNS cutover.**
 
 ## Two objectives, in priority order
 
