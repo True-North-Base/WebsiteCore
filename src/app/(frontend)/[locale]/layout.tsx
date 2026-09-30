@@ -5,6 +5,7 @@ import React from 'react'
 
 import { getDictionary, isLocale, locales } from '@/i18n'
 import { AnalyticsConsent } from '@/modules/core/components/AnalyticsConsent'
+import { allowsIndexing } from '@/modules/core/hosting/indexing'
 import { localizedAlternates, productionSiteURL } from '@/modules/rentals/lib/seo'
 import '../styles.css'
 
@@ -39,6 +40,7 @@ export async function generateMetadata(props: {
       template: `%s · ${t.siteName}`,
     },
     description: t.tagline,
+    robots: allowsIndexing(productionSiteURL) ? undefined : { index: false, follow: false },
     alternates: {
       canonical: `/${locale}`,
       languages: localizedAlternates(),

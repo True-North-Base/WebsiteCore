@@ -2,7 +2,7 @@
 
 Production website for [CR Mariposa Rentals](https://www.crmariposarentals.com/) (family-run furnished rentals in Santa Ana, Costa Rica) and the first implementation of a reusable small-business website platform.
 
-**Status: Production launch was authorized on 2026-09-25. The bilingual site, CMS, Supabase/R2 media, SEO, launch hardening, privacy/consent, and measurement integration are prepared on Netlify staging. The owner CMS walkthrough and controlled registrar/DNS cutover remain open; the public domain continues to serve Squarespace until its complete DNS record set is captured.**
+**Status: The bilingual site and CMS are deployed to [Vercel staging](https://cr-mariposa-staging.vercel.app/en) under True North Base. The 2026-09-30 migration checks passed, including authenticated 6 MiB direct photo uploads and all generated image sizes. GitHub repository ownership is now True-North-Base; automatic deployment setup is awaiting the repository-scoped app approval. Existing Supabase data, R2 media and accounts are retained. Netlify is a temporary fallback; the public domain still serves Squarespace pending controlled DNS cutover.**
 
 ## Two objectives, in priority order
 
@@ -13,7 +13,7 @@ Objective 2 is never allowed to delay or complicate Objective 1.
 
 ## Stack
 
-Next.js 16 (App Router) · React · TypeScript · Tailwind CSS · Payload CMS 3 · PostgreSQL · Cloudflare R2 media · Netlify hosting. The staging application runs on Supabase, serves provider-neutral media object keys through R2's public URL, and is deployed at [cr-mariposa-staging.netlify.app](https://cr-mariposa-staging.netlify.app). Exact versions and rationale: [docs/DECISIONS.md](docs/DECISIONS.md).
+Next.js 16 (App Router) · React · TypeScript · Tailwind CSS · Payload CMS 3 · PostgreSQL · Cloudflare R2 media · Vercel hosting. The staging application runs on Supabase and derives public media URLs from provider-neutral object keys. Deployment, credentials, direct uploads and domain cutover: [docs/VERCEL_DEPLOYMENT.md](docs/VERCEL_DEPLOYMENT.md). Exact versions and rationale: [docs/DECISIONS.md](docs/DECISIONS.md).
 
 ## Documentation map
 

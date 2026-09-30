@@ -32,15 +32,44 @@ describe('R2 configuration', () => {
     expect(getR2Config(completeEnvironment)).toEqual({
       accessKeyId: 'access-key',
       bucket: 'cr-mariposa-media',
+      clientUploads: false,
       endpoint: 'https://account-id.r2.cloudflarestorage.com',
       publicURL: 'https://media.example.com/assets',
       secretAccessKey: 'secret-key',
     })
   })
 
+  it('enables direct uploads only when explicitly requested', () => {
+    expect(getR2Config({ ...completeEnvironment, R2_CLIENT_UPLOADS: 'true' })?.clientUploads).toBe(
+      true,
+    )
+    expect(getR2Config({ ...completeEnvironment, R2_CLIENT_UPLOADS: 'false' })?.clientUploads).toBe(
+      false,
+    )
+    expect(getR2Config({ ...completeEnvironment, R2_CLIENT_UPLOADS: '' })?.clientUploads).toBe(
+      false,
+    )
+  })
+
+  it('rejects invalid direct-upload settings instead of silently using server uploads', () => {
+    expect(() => getR2Config({ ...completeEnvironment, R2_CLIENT_UPLOADS: 'yes' })).toThrow(
+      'R2_CLIENT_UPLOADS must be true or false',
+    )
+  })
+
+  it('requires cloud storage before direct uploads can be enabled', () => {
+    expect(() => getR2Config({ R2_CLIENT_UPLOADS: 'true' })).toThrow(
+      'R2_CLIENT_UPLOADS requires a complete R2 configuration',
+    )
+    expect(getR2Config({ R2_CLIENT_UPLOADS: 'false' })).toBeNull()
+  })
+
   it('rejects endpoint paths and non-HTTPS public URLs', () => {
     expect(() =>
-      getR2Config({ ...completeEnvironment, R2_ENDPOINT: `${completeEnvironment.R2_ENDPOINT}/bucket` }),
+      getR2Config({
+        ...completeEnvironment,
+        R2_ENDPOINT: `${completeEnvironment.R2_ENDPOINT}/bucket`,
+      }),
     ).toThrow('R2_ENDPOINT must be the account endpoint origin without a path')
 
     expect(() =>
@@ -57,7 +86,11 @@ describe('R2 configuration', () => {
       search: '',
     })
     expect(
-      getR2PublicFileURL('https://media.example.com/', 'hero image.png', '/properties/penthouse-lago/'),
+      getR2PublicFileURL(
+        'https://media.example.com/',
+        'hero image.png',
+        '/properties/penthouse-lago/',
+      ),
     ).toBe('https://media.example.com/properties/penthouse-lago/hero image.png')
     expect(getR2ObjectKey('hero image.png', '/properties/penthouse-lago/')).toBe(
       'properties/penthouse-lago/hero image.png',

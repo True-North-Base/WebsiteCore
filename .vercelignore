@@ -1,0 +1,12 @@
+# Never upload local credentials or prior host artifacts with the CLI.
+.env
+.env.*
+.netlify
+.next
+node_modules
+artifacts
+Desings
+TempData
+playwright-report
+test-results
+*.tsbuildinfo

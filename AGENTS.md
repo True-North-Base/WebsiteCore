@@ -13,11 +13,11 @@ Priorities, in order — never trade 1 for 2:
 
 ## Current phase
 
-**Production launch was authorized on 2026-09-25. The approved implementation is being consolidated for release; privacy/consent and measurement support are prepared, the production domains are attached in Netlify without DNS changes, and the owner CMS walkthrough plus controlled registrar/DNS cutover remain open.** See [docs/ROADMAP.md](docs/ROADMAP.md). Do not change production DNS until the existing record set is captured and domain access is explicitly available.
+**Vercel staging migration was authorized on 2026-09-30 and is being verified under True North Base. Existing Supabase/R2 data and client accounts are retained. Netlify remains a fallback; the production domain still serves Squarespace.** See [docs/VERCEL_DEPLOYMENT.md](docs/VERCEL_DEPLOYMENT.md). Do not change production DNS until the existing record set is captured and domain access is explicitly available.
 
 ## Stack
 
-Next.js 16 App Router + Payload CMS 3 in a single app · TypeScript · Tailwind · Postgres (Supabase, pooled) · Cloudflare R2 media via `@payloadcms/storage-s3` · Netlify · pnpm · Node 22.x LTS for the completed foundation. Exact pins and the Node 24 checkpoint: [docs/DECISIONS.md](docs/DECISIONS.md#d-014--exact-verified-version-baseline-after-phase-1-2026-08-26).
+Next.js 16 App Router + Payload CMS 3 in a single app · TypeScript · Tailwind · Postgres (Supabase, pooled) · Cloudflare R2 media via `@payloadcms/storage-s3` · Vercel (Netlify fallback during migration) · pnpm · Node 22.x. Exact pins and the Node 24 checkpoint: [docs/DECISIONS.md](docs/DECISIONS.md#d-014--exact-verified-version-baseline-after-phase-1-2026-08-26).
 
 ## Hard rules
 
