@@ -18,6 +18,8 @@ Required: `DATABASE_URL` (existing transaction pooler), `PAYLOAD_SECRET` (retain
 
 Optional: `GOOGLE_MAPS_EMBED_API_KEY`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`, `RESEND_API_KEY`, `INQUIRY_TO_EMAIL`, `INQUIRY_FROM_EMAIL`. Carry existing approved measurement IDs forward. Resend notifications remain disabled until all three mail values are supplied with a verified sender; saved inquiries do not depend on email delivery.
 
+The final staging build includes the retained public measurement identifiers. An owner-authorized check of Netlify production found all three email values absent, so there were no existing Resend settings to copy. Configure them separately after sender verification; no notification email was sent during this migration.
+
 ## R2 direct uploads
 
 Original photos bypass Vercel Functions via Payload's authenticated signing endpoint, `/api/storage-s3-generate-signed-url`. Payload still processes image variants and stores provider-neutral object keys. Do not broaden credentials or replace the storage adapter.
