@@ -19,7 +19,7 @@ One deployable: a single Next.js 16 App Router application with Payload CMS 3 in
                     PostgreSQL (Supabase, pooled)     Cloudflare R2 (media)
 ```
 
-Why this shape: Payload 3 is designed to install into Next.js; one repo, one deploy, one auth story, and the owner gets `/admin` on the same domain. It deploys to Netlify as a normal Next.js site.
+Why this shape: Payload 3 is installed into Next.js; one repo, one deploy, one auth story, and `/admin` on the same domain. Vercel is the current target (D-031); Netlify remains a fallback during migration. No proprietary storage or database migration is required.
 
 ## 2. Platform organization
 
@@ -132,10 +132,12 @@ Stable design evidence is now stored under `Desings/Contemporary hospitality des
 
 | | Dev | Production |
 |---|---|---|
-| App | `next dev` local | Netlify (Next.js runtime) |
+| App | `next dev` local | Vercel (Next.js runtime, Node 22) |
 | DB | local Postgres or Supabase dev project | Supabase Postgres via pooler |
 | Media | local disk | Cloudflare R2 |
-| Secrets | `.env` (gitignored), documented in `.env.example` | Netlify env vars |
+| Secrets | `.env` (gitignored), documented in `.env.example` | Vercel environment variables |
+
+**Vercel migration — 2026-09-30:** runtime database pooling, Payload authentication and media object keys remain unchanged. `R2_CLIENT_UPLOADS=true` enables authenticated signed direct uploads of originals to avoid the Vercel Functions 4.5 MB request-body limit; Payload still generates image variants. The optional flag defaults off for existing server-mediated hosts. Bucket CORS must allow the exact admin origin and PUT with Content-Type/If-None-Match. Preview builds cannot index even when inheriting a canonical production URL; noncanonical staging builds also emit noindex metadata. See [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) for current operational requirements; earlier Netlify-specific passages are historical context.
 
 Production database traffic uses Supabase's transaction pooler (`:6543`) because Netlify functions are short-lived. Schema migrations and administrative tools use a controlled direct or session connection instead; transaction mode does not support prepared statements or session-level features ([Supabase connection guidance](https://supabase.com/docs/guides/database/connecting-to-postgres)). The application and migration connection strings are separate secrets and must never reach the client bundle (D-016).
 

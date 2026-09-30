@@ -199,6 +199,12 @@ Payload is the system of record. The hook catches provider, timeout, and propert
 
 ---
 
+## D-031 — Vercel is the True North hosting target (2026-09-30)
+
+The owner superseded D-005 before production DNS cutover: True North websites will use Vercel. CR Mariposa moves to a Vercel project in the True North Base team without reseeding the shared Supabase database, recreating accounts, or rewriting R2 object keys. Node 22 and locked dependencies remain the tested baseline; Netlify is retained temporarily for rollback.
+
+Vercel's 4.5 MB function body limit makes authenticated direct-to-R2 uploads necessary for owner photo workflows. The existing Payload adapter is enabled by the strict optional `R2_CLIENT_UPLOADS` flag with exact-origin bucket CORS; credentials remain server-only and Sharp variants are preserved. Preview environment checks and staging noindex metadata prevent accidental indexing. This is hosting portability, not a new generic provider layer. Moving the R2 bucket to the new Cloudflare account requires a separately verified object copy and new scoped credentials, not a database URL migration.
+
 _Template:_
 
 ```

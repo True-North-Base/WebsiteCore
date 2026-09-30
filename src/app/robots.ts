@@ -1,16 +1,10 @@
 import type { MetadataRoute } from 'next'
 
+import { allowsIndexing } from '@/modules/core/hosting/indexing'
 import { productionSiteURL } from '@/modules/rentals/lib/seo'
 
-function normalizeURL(value: string | undefined): string | undefined {
-  return value?.replace(/\/+$/, '')
-}
-
 export default function robots(): MetadataRoute.Robots {
-  const isCanonicalProduction =
-    normalizeURL(process.env.NEXT_PUBLIC_SERVER_URL) === productionSiteURL
-
-  if (!isCanonicalProduction) {
+  if (!allowsIndexing(productionSiteURL)) {
     return { rules: { userAgent: '*', disallow: '/' } }
   }
 

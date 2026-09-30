@@ -62,6 +62,9 @@ export default buildConfig({
     ? [
         s3Storage({
           bucket: r2.bucket,
+          // The adapter signs uploads only for authenticated users. Originals
+          // bypass the function body limit; Payload still generates image sizes.
+          clientUploads: r2.clientUploads,
           collections: {
             media: {
               disablePayloadAccessControl: true,

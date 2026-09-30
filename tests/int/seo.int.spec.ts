@@ -1,7 +1,8 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import sitemap from '../../src/app/sitemap'
 import robots from '../../src/app/robots'
+import { allowsIndexing } from '../../src/modules/core/hosting/indexing'
 import { serializeJsonLd } from '../../src/modules/core/components/JsonLd'
 import { getPropertyStaticParams } from '../../src/modules/rentals/lib/cms-content'
 import { legacyRedirects } from '../../src/modules/rentals/lib/legacy-redirects'
@@ -12,10 +13,8 @@ import {
 } from '../../src/modules/rentals/lib/seo'
 import type { PropertyDetailContent } from '../../src/modules/rentals/lib/phase2-content'
 
-const originalServerURL = process.env.NEXT_PUBLIC_SERVER_URL
-
 afterEach(() => {
-  process.env.NEXT_PUBLIC_SERVER_URL = originalServerURL
+  vi.unstubAllEnvs()
 })
 
 describe('SEO and cutover infrastructure', () => {
@@ -46,14 +45,32 @@ describe('SEO and cutover infrastructure', () => {
   })
 
   it('blocks staging crawlers but exposes the canonical production sitemap', () => {
-    process.env.NEXT_PUBLIC_SERVER_URL = 'https://cr-mariposa-staging.netlify.app'
+    vi.stubEnv('VERCEL_ENV', '')
+    vi.stubEnv('NEXT_PUBLIC_SERVER_URL', 'https://cr-mariposa-staging.netlify.app')
     expect(robots()).toEqual({ rules: { userAgent: '*', disallow: '/' } })
 
-    process.env.NEXT_PUBLIC_SERVER_URL = productionSiteURL
+    vi.stubEnv('NEXT_PUBLIC_SERVER_URL', productionSiteURL)
     expect(robots()).toMatchObject({
       host: productionSiteURL,
       sitemap: `${productionSiteURL}/sitemap.xml`,
     })
+  })
+
+  it('never indexes Vercel previews even when they inherit the production URL', () => {
+    vi.stubEnv('NEXT_PUBLIC_SERVER_URL', productionSiteURL)
+    for (const environment of ['preview', 'development', 'staging']) {
+      vi.stubEnv('VERCEL_ENV', environment)
+      expect(allowsIndexing(productionSiteURL)).toBe(false)
+      expect(robots()).toEqual({ rules: { userAgent: '*', disallow: '/' } })
+    }
+  })
+
+  it('indexes Vercel production only after its configured URL is canonical', () => {
+    vi.stubEnv('VERCEL_ENV', 'production')
+    vi.stubEnv('NEXT_PUBLIC_SERVER_URL', 'https://cr-mariposa-staging.vercel.app')
+    expect(allowsIndexing(productionSiteURL)).toBe(false)
+    vi.stubEnv('NEXT_PUBLIC_SERVER_URL', `${productionSiteURL}/`)
+    expect(allowsIndexing(productionSiteURL)).toBe(true)
   })
 
   it('lists every published property in both languages with hreflang alternates', async () => {

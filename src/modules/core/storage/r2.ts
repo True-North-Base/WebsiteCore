@@ -7,11 +7,12 @@ const R2_ENV_KEYS = [
 ] as const
 
 type R2EnvironmentKey = (typeof R2_ENV_KEYS)[number]
-type R2Environment = Partial<Record<R2EnvironmentKey, string | undefined>>
+type R2Environment = Partial<Record<R2EnvironmentKey | 'R2_CLIENT_UPLOADS', string | undefined>>
 
 export type R2Config = {
   accessKeyId: string
   bucket: string
+  clientUploads: boolean
   endpoint: string
   publicURL: string
   secretAccessKey: string
@@ -28,7 +29,8 @@ function parseHTTPSURL(name: 'R2_ENDPOINT' | 'R2_PUBLIC_URL', value: string): UR
 
   if (url.protocol !== 'https:') throw new Error(`${name} must use https.`)
   if (url.username || url.password) throw new Error(`${name} must not contain credentials.`)
-  if (url.search || url.hash) throw new Error(`${name} must not contain a query string or fragment.`)
+  if (url.search || url.hash)
+    throw new Error(`${name} must not contain a query string or fragment.`)
 
   return url
 }
@@ -40,12 +42,20 @@ function parseHTTPSURL(name: 'R2_ENDPOINT' | 'R2_PUBLIC_URL', value: string): UR
 export function getR2Config(
   environment: R2Environment = process.env as R2Environment,
 ): R2Config | null {
+  const clientUploadSetting = environment.R2_CLIENT_UPLOADS?.trim() || ''
+  if (!['', 'true', 'false'].includes(clientUploadSetting)) {
+    throw new Error('R2_CLIENT_UPLOADS must be true or false when configured.')
+  }
+  const clientUploads = clientUploadSetting === 'true'
   const values = Object.fromEntries(
     R2_ENV_KEYS.map((key) => [key, environment[key]?.trim() || '']),
   ) as Record<R2EnvironmentKey, string>
 
   const configuredKeys = R2_ENV_KEYS.filter((key) => values[key])
-  if (configuredKeys.length === 0) return null
+  if (configuredKeys.length === 0) {
+    if (clientUploads) throw new Error('R2_CLIENT_UPLOADS requires a complete R2 configuration.')
+    return null
+  }
 
   const missingKeys = R2_ENV_KEYS.filter((key) => !values[key])
   if (missingKeys.length > 0) {
@@ -62,6 +72,7 @@ export function getR2Config(
   return {
     accessKeyId: values.R2_ACCESS_KEY_ID,
     bucket: values.R2_BUCKET,
+    clientUploads,
     endpoint: endpoint.origin,
     publicURL: publicURL.toString().replace(/\/$/, ''),
     secretAccessKey: values.R2_SECRET_ACCESS_KEY,
@@ -138,10 +149,7 @@ export function normalizeR2MediaStorageKeys<T extends MediaURLData>(
  * Payload persists the provider-neutral object key. Public delivery URLs are a
  * read-time projection so changing the asset host never requires a DB rewrite.
  */
-export function materializeR2MediaURLs<T extends MediaURLData>(
-  document: T,
-  publicURL: string,
-): T {
+export function materializeR2MediaURLs<T extends MediaURLData>(document: T, publicURL: string): T {
   const toPublicURL = (value: string | null | undefined) => {
     if (!value || /^https:\/\//i.test(value)) return value
     return getR2PublicFileURL(publicURL, value)
